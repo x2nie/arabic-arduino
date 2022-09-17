@@ -1,0 +1,13 @@
+import serial, time
+
+com = serial.Serial('/dev/ttyUSB0',9600)
+com.timeout = 1
+
+while True:
+    i = input('on/off?:').strip()
+    if not i in ['on','off', 'smile', 'bell','clock']:
+        break
+    com.write(i.encode())
+    time.sleep(0.5)
+
+com.close()
