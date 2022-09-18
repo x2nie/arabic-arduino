@@ -85,10 +85,26 @@ void displayKeyCodes(void) {
   }
 }
 
+void ccg() {
+  //if ( Serial.available() == 9 )
+  //{
+    uint8_t index = Serial.read() >> 1;
+    byte bytes[8];
+    for ( uint8_t i = 0; i < 8; i++ )
+      bytes[i] = Serial.read() >> 1;
+    lcd.createChar(index, bytes);
+  //}
+}
+
 void loop()
 {
   if (Serial.available()>0){
     inBytes = Serial.readStringUntil('\n');
+    lcd.setCursor(0, 3);
+    lcd.print("       ");
+    lcd.setCursor(0, 3);
+    lcd.print(inBytes);
+    
     if (inBytes == "on"){
       digitalWrite(LED_BUILTIN,HIGH);
     }
@@ -104,6 +120,10 @@ void loop()
     if (inBytes == "clock"){
       lcd.createChar(0, clock);
     }
+    if (inBytes == "ccg"){
+      ccg();
+    }
+    
         
   }
 }
