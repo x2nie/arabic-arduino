@@ -16,3 +16,4 @@ for line in sura1.splitlines():
         print(word)
         for c in word:
             print('   #'+ str(ord(c)), ' ---- ',c, '     ', unicodedata.name(c) )
+    break

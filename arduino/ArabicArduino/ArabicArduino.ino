@@ -49,22 +49,24 @@ void setup()
   lcd.createChar(7, retarrow);
   lcd.home();
   
-  lcd.print("Hello world...");
+  lcd.print("Hi world...");
   lcd.setCursor(0, 1);
-  lcd.print(" i ");
+  lcd.print("[ ");
+  lcd.printByte(0);
+  lcd.printByte(1);
+  lcd.printByte(2);
   lcd.printByte(3);
   lcd.printByte(4);
   lcd.printByte(5);
   lcd.printByte(6);
   lcd.printByte(7);
-  lcd.printByte(1);
-  lcd.printByte(0);
-  lcd.print(" arduinos!");
-  delay(5000);
+  lcd.print(" ]");
+  delay(50);
   //displayKeyCodes();
 
   Serial.begin(9600);
-  pinMode(LED_BUILTIN,OUTPUT);
+  //Serial.setTimeout(10);
+  //pinMode(LED_BUILTIN,OUTPUT);
   
 }
 
@@ -86,29 +88,51 @@ void displayKeyCodes(void) {
 }
 
 void ccg() {
-  //if ( Serial.available() == 9 )
-  //{
+  if ( Serial.available() == 9 )
+  {
     uint8_t index = Serial.read() >> 1;
     byte bytes[8];
     for ( uint8_t i = 0; i < 8; i++ )
       bytes[i] = Serial.read() >> 1;
     lcd.createChar(index, bytes);
-  //}
+  }
 }
+
+void gotoxy() {
+  uint8_t x = Serial.read();
+  uint8_t y = Serial.read();
+  lcd.setCursor(x, y);
+}
+
+
+void writeLn() {
+  int incomingByte = Serial.read();
+  char buf[20];
+  int len = Serial.readBytes(buf, incomingByte);
+  lcd.print(buf);
+}
+void writeAr() {
+  int incomingByte = Serial.read();
+  for ( uint8_t i = 0; i < incomingByte; i++ ) {
+    incomingByte = Serial.read();
+    lcd.printByte(incomingByte);
+  }
+}
+
 
 void loop()
 {
   if (Serial.available()>0){
     inBytes = Serial.readStringUntil('\n');
-    lcd.setCursor(0, 3);
+    lcd.setCursor(0, 2);
     lcd.print("       ");
-    lcd.setCursor(0, 3);
+    lcd.setCursor(0, 2);
     lcd.print(inBytes);
     
-    if (inBytes == "on"){
+    /*if (inBytes == "on"){
       digitalWrite(LED_BUILTIN,HIGH);
     }
-    if (inBytes == "off"){
+    else if (inBytes == "off"){
       digitalWrite(LED_BUILTIN,LOW);
     }
     if (inBytes == "smile"){
@@ -119,11 +143,18 @@ void loop()
     }
     if (inBytes == "clock"){
       lcd.createChar(0, clock);
-    }
+    }*/
     if (inBytes == "ccg"){
       ccg();
     }
-    
-        
+    if (inBytes == "goto"){
+      gotoxy();
+    }
+    if (inBytes == "writeln"){
+      writeLn();
+    }
+    if (inBytes == "writeAr"){
+      writeAr();
+    }
   }
 }

@@ -1,13 +1,77 @@
 import serial, time
+from arabicArduino import LCD, gundul
 
 com = serial.Serial('/dev/ttyUSB0',9600)
 com.timeout = 1
+lcd = LCD(com)
+
+termo = [#icon for termometer
+    0b00100,
+    0b01010,
+    0b01010,
+    0b01110,
+    0b01110,
+    0b11111,
+    0b11111,
+    0b01110
+]
+droplet = [ #icon for water droplet
+    0b00100,
+    0b00100,
+    0b01010,
+    0b01010,
+    0b10001,
+    0b10001,
+    0b10001,
+    0b01110,
+]
+xpmm = ''' #icon for water droplet
+    ░░█░░    ░░░░██░░░░
+    ░░█░░    ░░░░██░░░░
+    ░█░█░    ░░██░░██░░
+    ░█░█░    ░░██░░██░░
+    █░░░█    ██░░░░░░██
+    █░░░█    ██░░░░░░██
+    █░░░█    ██░░░░░░██
+    ░███░    ░░██████░░
+'''
+termo2 = '''#icon for termometer
+    ░░█░░
+    ░█░█░
+    ░█░█░
+    ░███░
+    ░███░
+    █████
+    █████
+    ░███░
+'''
+
+def oneWord():
+    word = gundul('بِسْمِ')
+    return word
+print(oneWord())
+# lcd.displayA('بِسْمِ')
 
 while True:
-    i = input('on/off?:').strip()
-    if not i in ['on','off', 'smile', 'bell','clock']:
+    cmd = input('on/off?:').strip()
+    if not cmd in 'on off smile bell clock t d b g0 g1 w1'.split(' '):
         break
-    com.write(i.encode())
+    
+    if cmd == 'b':
+        lcd.displayA('بِسْمِ')
+    if cmd == 't':
+        lcd.ccg(1, termo)
+    elif cmd == 'g1':
+        lcd.gotoxy(0,2)
+    elif cmd == 'g0':
+        lcd.gotoxy(0,0)
+    elif cmd == 'w1':
+        lcd.writeln('aloha!')
+    elif cmd == 'd':
+        lcd.ccg(0, droplet)
+    else:
+        com.write(cmd.encode())
+
     time.sleep(0.5)
 
 com.close()

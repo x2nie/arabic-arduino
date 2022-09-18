@@ -21,7 +21,7 @@
       0b00100
     ],
     "medial": 'initial',
-    "final": null
+    "final": None
   },
   "ARABIC LETTER SEEN" : {
     "isolated": [
@@ -45,7 +45,7 @@
       0b00000
     ],
     "medial": 'initial',
-    "final": null
+    "final": None
   },
   "ARABIC LETTER MEEM" : {
     "isolated": [
