@@ -9,35 +9,44 @@ class LCD:
     def __init__(self, ser:Serial) -> None:
         self.ser = ser
 
-    def send(self, s:str):
-        if DEBUG: print('   send->', s.encode())
-        self.ser.write(s.encode())
+    def send(self, s:bytearray):
+        if DEBUG: print('   send->', s)
+        self.ser.write(s)
 
-    def cmd(self, s:str):
+    def send_cmd(self, cmd:str, data):
+        raw = cmd.encode()
+        if not isinstance(data, bytearray):
+            data = bytearray(data)
+        self.send(raw + data + '\0\n'.encode())
+
+    def _cmd(self, s:str):
         self.send(s.strip() + '\n')
 
     def ccg(self, index:int, chars:List[int]):
         "set a custom char new graphic"
-        self.cmd('ccg')
         while len(chars) < 8: chars += [0]
         chars = chars[:8]
         data = [index] + chars
-        data = ''.join( [chr( (i << 1)+1 ) for i in data] )
-        self.send(data)
+        data = [(i << 1)+1 for i in data] 
+        self.send_cmd('ccg', data)
+        sleep(0.5)
 
     def gotoxy(self, x:int, y:int):
         self.cmd('goto')
-        self.send(chr(x) + chr(y))
+        self.send(chr((x<<1) + 1) + chr((y << 1) + 1))
+        sleep(0.5)
     
     def writeln(self, s:str):
-        self.cmd('writeln')
-        self.send(chr(len(s)))
-        self.send(s)
+        # self.cmd('writeln')
+        # self.send(chr(len(s)))
+        self.send_cmd('prn', s.encode())
 
     def writeArabic(self, arabic_str:str):
         self.cmd('writeAr')
         self.send(chr(len(arabic_str)))
-        self.send(arabic_str)
+        # self.send(arabic_str)
+        data = ''.join([ chr( (ord(i)<<1)+1 ) for i in arabic_str ])
+        self.send(data)
 
     def displayA(self, arabicWord: str):
         s = gundul(arabicWord)
@@ -54,7 +63,7 @@ class LCD:
                 txt += chr(chars.index(p))
         for i,c in enumerate(chars):
             self.ccg(i,c)
-            sleep(0.2)
+            # sleep(0.2)
 
         self.gotoxy(0,0)
         self.writeArabic(txt)

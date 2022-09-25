@@ -10,7 +10,7 @@
 #define printByte(args)  print(args,BYTE);
 #endif
 
-uint8_t bell[8]  = {0x4,0xe,0xe,0xe,0x1f,0x0,0x4};
+/*uint8_t bell[8]  = {0x4,0xe,0xe,0xe,0x1f,0x0,0x4};
 uint8_t note[8]  = {0x2,0x3,0x2,0xe,0x1e,0xc,0x0};
 uint8_t clock[8] = {0x0,0xe,0x15,0x17,0x11,0xe,0x0};
 uint8_t heart[8] = {0x0,0xa,0x1f,0x1f,0xe,0x4,0x0};
@@ -28,30 +28,31 @@ byte smile[] = {
   B10001,
   B01110,
   B00000
-};
+};*/
   
 LiquidCrystal_I2C lcd(0x27,20,4);  // set the LCD address to 0x27 for a 16 chars and 2 line display
 
 String inBytes;
+String lastBytes;
 
 void setup()
 {
   lcd.init();                      // initialize the lcd 
   lcd.backlight();
   
-  lcd.createChar(0, bell);
+  /*lcd.createChar(0, bell);
   lcd.createChar(1, note);
   lcd.createChar(2, clock);
   lcd.createChar(3, heart);
   lcd.createChar(4, duck);
   lcd.createChar(5, check);
   lcd.createChar(6, cross);
-  lcd.createChar(7, retarrow);
+  lcd.createChar(7, retarrow);*/
   lcd.home();
   
-  lcd.print("Hi world...");
-  lcd.setCursor(0, 1);
-  lcd.print("[ ");
+  //lcd.print("Hi world...");
+  //lcd.setCursor(0, 1);
+  //lcd.print("[ ");
   lcd.printByte(0);
   lcd.printByte(1);
   lcd.printByte(2);
@@ -60,7 +61,7 @@ void setup()
   lcd.printByte(5);
   lcd.printByte(6);
   lcd.printByte(7);
-  lcd.print(" ]");
+  lcd.print(">");
   delay(50);
   //displayKeyCodes();
 
@@ -87,21 +88,28 @@ void displayKeyCodes(void) {
   }
 }
 
-void ccg() {
-  if ( Serial.available() == 9 )
-  {
-    uint8_t index = Serial.read() >> 1;
+bool ccg(String data) {
+  if ( data.length() == 9 ) {
+    byte buffer[data.length() + 1];
+    data.getBytes(buffer, data.length() + 1);    
+    uint8_t index = buffer[0] >> 1;
     byte bytes[8];
     for ( uint8_t i = 0; i < 8; i++ )
-      bytes[i] = Serial.read() >> 1;
+      bytes[i] = buffer[1+i] >> 1;
     lcd.createChar(index, bytes);
+    return true;
   }
+  return false;
 }
 
 void gotoxy() {
-  uint8_t x = Serial.read();
-  uint8_t y = Serial.read();
-  lcd.setCursor(x, y);
+ if ( Serial.available() >= 2 ) {
+    uint8_t x = Serial.read() >> 1;
+    uint8_t y = Serial.read() >> 1;
+    lcd.setCursor(x, y);
+    lcd.print(" ");
+    lcd.setCursor(x, y);
+ }
 }
 
 
@@ -112,22 +120,49 @@ void writeLn() {
   lcd.print(buf);
 }
 void writeAr() {
-  int incomingByte = Serial.read();
-  for ( uint8_t i = 0; i < incomingByte; i++ ) {
-    incomingByte = Serial.read();
-    lcd.printByte(incomingByte);
+  if ( Serial.available() >= 1 ) {
+    int incomingBytes = Serial.read();
+    if ( Serial.available() == incomingBytes ) {
+      for ( uint8_t i = 0; i < incomingBytes; i++ ) {
+        uint8_t incomingByte = Serial.read() >> 1;
+        lcd.printByte(incomingByte);
+      }
+    }
+    lcd.print(" ");
   }
 }
 
+String data;
+String cmd;
+byte buf[16]; 
 
 void loop()
 {
   if (Serial.available()>0){
-    inBytes = Serial.readStringUntil('\n');
-    lcd.setCursor(0, 2);
-    lcd.print("       ");
-    lcd.setCursor(0, 2);
-    lcd.print(inBytes);
+    data = Serial.readStringUntil('\n');
+    cmd = data.substring(0,3);
+    data = data.substring(3);
+    if (cmd == "prn"){
+      lcd.print(data);
+    }
+    else if (cmd == "ccg") {
+      ccg(data);
+    }
+
+    Serial.println(cmd);
+    Serial.println(data);
+      
+//    lcd.print(cmd);
+//    lcd.print("<.");
+//    lcd.print(data);
+
+    // if (lastBytes != "goto") {
+    // lcd.setCursor(0, 2);
+    // lcd.print(" ");
+    // lcd.setCursor(0, 2);
+    // }
+    // lcd.print(inBytes);
+    // lastBytes = inBytes;
     
     /*if (inBytes == "on"){
       digitalWrite(LED_BUILTIN,HIGH);
@@ -144,17 +179,17 @@ void loop()
     if (inBytes == "clock"){
       lcd.createChar(0, clock);
     }*/
-    if (inBytes == "ccg"){
-      ccg();
-    }
-    if (inBytes == "goto"){
-      gotoxy();
-    }
-    if (inBytes == "writeln"){
-      writeLn();
-    }
-    if (inBytes == "writeAr"){
-      writeAr();
-    }
+    // if (inBytes == "ccg"){
+    //   ccg();
+    // }
+    // if (inBytes == "goto"){
+    //   gotoxy();
+    // }
+    // if (inBytes == "writeln"){
+    //   writeLn();
+    // }
+    // if (inBytes == "writeAr"){
+    //   writeAr();
+    // }
   }
 }
