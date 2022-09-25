@@ -53,14 +53,14 @@ void setup()
   //lcd.print("Hi world...");
   //lcd.setCursor(0, 1);
   //lcd.print("[ ");
-  lcd.printByte(0);
-  lcd.printByte(1);
-  lcd.printByte(2);
-  lcd.printByte(3);
-  lcd.printByte(4);
-  lcd.printByte(5);
-  lcd.printByte(6);
-  lcd.printByte(7);
+//  lcd.printByte(0);
+//  lcd.printByte(1);
+//  lcd.printByte(2);
+//  lcd.printByte(3);
+//  lcd.printByte(4);
+//  lcd.printByte(5);
+//  lcd.printByte(6);
+//  lcd.printByte(7);
   lcd.print(">");
   delay(50);
   //displayKeyCodes();
@@ -102,12 +102,12 @@ bool ccg(String data) {
   return false;
 }
 
-void gotoxy() {
- if ( Serial.available() >= 2 ) {
-    uint8_t x = Serial.read() >> 1;
-    uint8_t y = Serial.read() >> 1;
-    lcd.setCursor(x, y);
-    lcd.print(" ");
+void gotoxy(String data) {
+  if ( data.length() >= 2 ) {
+  byte buffer[data.length() + 1];
+    data.getBytes(buffer, data.length() + 1);    
+    uint8_t x = buffer[0] >> 1;
+    uint8_t y = buffer[1] >> 1;    
     lcd.setCursor(x, y);
  }
 }
@@ -119,16 +119,26 @@ void writeLn() {
   int len = Serial.readBytes(buf, incomingByte);
   lcd.print(buf);
 }
-void writeAr() {
-  if ( Serial.available() >= 1 ) {
-    int incomingBytes = Serial.read();
-    if ( Serial.available() == incomingBytes ) {
-      for ( uint8_t i = 0; i < incomingBytes; i++ ) {
-        uint8_t incomingByte = Serial.read() >> 1;
-        lcd.printByte(incomingByte);
-      }
+void writeAr(String data) {
+  if ( data.length() > 1 ) {
+    byte buffer[data.length() + 1];
+    data.getBytes(buffer, data.length() + 1);  
+      
+    uint8_t len = buffer[0] >> 1;
+    for ( uint8_t i = 0; i < len; i++ ){
+      uint8_t ch = buffer[1+i] >> 1;
+      lcd.printByte(ch);
     }
-    lcd.print(" ");
+    
+//  if ( Serial.available() >= 1 ) {
+//    int incomingBytes = Serial.read();
+//    if ( Serial.available() == incomingBytes ) {
+//      for ( uint8_t i = 0; i < incomingBytes; i++ ) {
+//        uint8_t incomingByte = Serial.read() >> 1;
+//        lcd.printByte(incomingByte);
+//      }
+//    }
+//    lcd.print(" ");
   }
 }
 
@@ -145,8 +155,14 @@ void loop()
     if (cmd == "prn"){
       lcd.print(data);
     }
+    else if (cmd == "prA") {
+      writeAr(data);
+    }
     else if (cmd == "ccg") {
       ccg(data);
+    }
+    else if (cmd == "@xy") {
+      gotoxy(data);
     }
 
     Serial.println(cmd);

@@ -19,15 +19,20 @@ def gundul(arabic_str:str)->str:
         # if ord(c) < FIRST_HARAKAH or ord(c) > LAST_HARAKAH:
         if FIRST_ARABIC <= ord(c) <= LAST_ARABIC:
             ret += c
+        elif c == ' ':
+            ret += c
     return ret
 
 
 def get_plane(unicodeName:str, expectedPosition:str)->List[int]:
     "Return an ccg plane (byteArray)"
+    initialExpected = expectedPosition
     block = individual_letters.get(unicodeName,None)
     if not block:
         return None
     while True:
+        space = ' ~> ' if initialExpected != expectedPosition else ''
+        print('\t\t %s unicodeName:' % space, unicodeName, 'expectedPosition:',expectedPosition)
         plane = block.get(expectedPosition)
         if plane is None: 
             if expectedPosition != 'isolated':
@@ -47,17 +52,27 @@ def get_plane(unicodeName:str, expectedPosition:str)->List[int]:
 
 def ccgs(arabic_str:str)->list:
     ret = []
-    for i,c in enumerate(arabic_str):
-        uName = unicodedata.name(c)
-        if len(arabic_str) == 1:
-            position = 'isolated'
-        elif i==0:
-            position = 'initial'
-        elif i==len(arabic_str)-1:
-            position = 'final'
-        else:
-            position = 'medial'
-        ccg = get_plane(uName, position)
-        ret.append(ccg)
+    arabic_str = arabic_str.strip()
+    first = True
+    for word in arabic_str.split(' '):
+        for i,c in enumerate(word):
+            uName = unicodedata.name(c)
+            if len(word) == 1:
+                position = 'isolated'
+            # elif i==0:
+            elif first:
+                position = 'initial'
+                first = False
+            elif c == ' ':
+                first = True
+                continue
+            elif i==len(word)-1:
+                position = 'final'
+            else:
+                position = 'medial'
+            ccg = get_plane(uName, position)
+            ret.append(ccg)
+            if uName == 'ARABIC LETTER ALEF':
+                first = True
     return ret
 

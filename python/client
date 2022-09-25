@@ -55,21 +55,28 @@ print(oneWord())
 while True:
     cmd = input('on/off?:').strip()
     # if not cmd in 'on off smile bell clock t d b b0 g0 g1 w1'.split(' '):
-    if not cmd in 't d p'.split(' '):
+    if not cmd in '8 t d p b g g1 a aa'.split(' '):
         break
     
-    if cmd == 'b':
-        lcd.displayA('بِسْمِ')
+    if cmd == 'a':
+        lcd.writeArabic([0,1,2])
+    elif cmd == 'aa':
+        lcd.writeArabic([2]*5)
+    elif cmd == '8':
+        c8 = [i for i in range(9)]
+        # c8.reverse()
+        lcd.writeArabic(c8)
+    elif cmd == 'b':
+        # lcd.displayA('بِسْمِ')
+        lcd.displayA('بِسْمِ اللّٰهِ ')
     elif cmd == 'b0':
         lcd.writeArabic(chr(2)+chr(1)+chr(0))
     elif cmd == 't':
         lcd.ccg(1, termo)
     elif cmd == 'g1':
         lcd.gotoxy(0,2)
-    elif cmd == 'g0':
+    elif cmd == 'g':
         lcd.gotoxy(0,0)
-    elif cmd == 'w1':
-        lcd.writeln('aloha!')
     elif cmd == 'd':
         lcd.ccg(0, droplet)
     elif cmd == 'p':

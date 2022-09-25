@@ -32,8 +32,9 @@ class LCD:
         sleep(0.5)
 
     def gotoxy(self, x:int, y:int):
-        self.cmd('goto')
-        self.send(chr((x<<1) + 1) + chr((y << 1) + 1))
+        # self.cmd('goto')
+        # self.send(chr((x<<1) + 1) + chr((y << 1) + 1))
+        self.send_cmd('@xy', [(x<<1) + 1, (y << 1) + 1])
         sleep(0.5)
     
     def writeln(self, s:str):
@@ -41,30 +42,39 @@ class LCD:
         # self.send(chr(len(s)))
         self.send_cmd('prn', s.encode())
 
-    def writeArabic(self, arabic_str:str):
-        self.cmd('writeAr')
-        self.send(chr(len(arabic_str)))
+    def writeArabic(self, arabic_str:List[int]):
+        # self.cmd('writeAr')
+        # self.send(chr(len(arabic_str)))
         # self.send(arabic_str)
-        data = ''.join([ chr( (ord(i)<<1)+1 ) for i in arabic_str ])
-        self.send(data)
+        # data = ''.join([ chr( (ord(i)<<1)+1 ) for i in arabic_str ])
+        arabic_str.reverse()
+        data = [len(arabic_str)] + arabic_str
+        data = [(i << 1)+1 for i in data] 
+        self.send_cmd('prA', data)
 
     def displayA(self, arabicWord: str):
+        arabicWord = arabicWord.strip()
         s = gundul(arabicWord)
+        print('gunduL', ' '.join([repr(a) for a in s]))
         planes:list = ccgs(s)        #? not unique
         print('ccgs:', planes)
         #? make unique:
         chars:List[int] = []
-        txt = ''                #? chr 0..7
+        txt = []                #? chr 0..7
         for p in planes:
             if p in chars:
-                txt += chr(chars.index(p))
+                txt.append(chars.index(p))
             else:
                 chars.append(p)
-                txt += chr(chars.index(p))
+                txt.append(chars.index(p))
+        
+
         for i,c in enumerate(chars):
             self.ccg(i,c)
             # sleep(0.2)
 
-        self.gotoxy(0,0)
+        # self.gotoxy(0,0)
+        sleep(3)
+        print('writing Arabic:', txt)
         self.writeArabic(txt)
 
