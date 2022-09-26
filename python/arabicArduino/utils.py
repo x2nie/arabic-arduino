@@ -53,8 +53,11 @@ def get_plane(unicodeName:str, expectedPosition:str)->List[int]:
 def ccgs(arabic_str:str)->list:
     ret = []
     arabic_str = arabic_str.strip()
-    first = True
-    for word in arabic_str.split(' '):
+    words = arabic_str.split(' ')
+    for iw,word in enumerate(words):
+        if iw > 0:
+            ret.append(' ')
+        first = True
         for i,c in enumerate(word):
             uName = unicodedata.name(c)
             if len(word) == 1:
@@ -64,6 +67,7 @@ def ccgs(arabic_str:str)->list:
                 position = 'initial'
                 first = False
             elif c == ' ':
+                ret.append(' ')
                 first = True
                 continue
             elif i==len(word)-1:

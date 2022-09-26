@@ -28,14 +28,14 @@ class LCD:
     # def _cmd(self, s:str):
     #     self.send(s.strip() + '\n')
 
-    def ccg(self, index:int, chars:List[int]):
+    def ccg(self, index:int, chars:List[int], asleep:float=0.5):
         "set a custom char new graphic"
         while len(chars) < 8: chars += [0]
         chars = chars[:8]
         data = [index] + chars
         # data = [(i << 1)+1 for i in data] 
         self.send_cmdSafe('ccg', data)
-        sleep(0.5)
+        sleep(asleep)
 
     def gotoxy(self, x:int, y:int):
         # self.cmd('goto')
@@ -49,13 +49,13 @@ class LCD:
         # self.send(chr(len(s)))
         self.send_cmd('prn', s.encode())
 
-    def writeArabic(self, arabic_str:List[int]):
+    def writeArabic(self, arabic_ints:List[int]):
         # self.cmd('writeAr')
         # self.send(chr(len(arabic_str)))
         # self.send(arabic_str)
         # data = ''.join([ chr( (ord(i)<<1)+1 ) for i in arabic_str ])
-        arabic_str.reverse()
-        data = [len(arabic_str)] + arabic_str
+        arabic_ints.reverse()
+        data = [len(arabic_ints)] + arabic_ints
         # data = [(i << 1)+1 for i in data] 
         # self.send_cmd('prA', data)
         self.send_cmdSafe('prA', data)
@@ -64,7 +64,7 @@ class LCD:
         arabicWord = arabicWord.strip()
         s = gundul(arabicWord)
         print('gunduL', ' '.join([repr(a) for a in s]))
-        planes:list = ccgs(s)        #? not unique
+        planes:list = ccgs(s)        #? not unique, might containing SPACE
         print('ccgs:', planes)
         #? make unique:
         chars:List[int] = []
@@ -72,6 +72,8 @@ class LCD:
         for p in planes:
             if p in chars:
                 txt.append(chars.index(p))
+            elif p == ' ':
+                txt.append(0x20)
             else:
                 chars.append(p)
                 txt.append(chars.index(p))
@@ -82,7 +84,7 @@ class LCD:
             # sleep(0.2)
 
         # self.gotoxy(0,0)
-        sleep(0.5)
+        sleep(1)
         print('writing Arabic:', txt)
         self.writeArabic(txt)
 

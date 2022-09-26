@@ -1,9 +1,13 @@
 import serial, time
-from arabicArduino import LCD, gundul
+from arabicArduino import LCD,Console, gundul
 
-com = serial.Serial('/dev/ttyUSB0',9600)
-com.timeout = 1
-lcd = LCD(com)
+com = None # for later close
+if 1:
+    com = serial.Serial('/dev/ttyUSB0',9600)
+    com.timeout = 1
+    lcd = LCD(com)
+else:
+    lcd = Console()
 
 termo = [#icon for termometer
     0b00100,
@@ -55,7 +59,7 @@ print(oneWord())
 while True:
     cmd = input('on/off?:').strip()
     # if not cmd in 'on off smile bell clock t d b b0 g0 g1 w1'.split(' '):
-    if not cmd in '8 t d p b g g1 a aa'.split(' '):
+    if not cmd in '8 t d p b bb g g1 a aa'.split(' '):
         break
     
     if cmd == 'a':
@@ -69,6 +73,8 @@ while True:
     elif cmd == 'b':
         # lcd.displayA('بِسْمِ')
         lcd.displayA('بِسْمِ اللّٰهِ ')
+    elif cmd == 'bb':
+        lcd.writeArabic([0, 1, 2, 0x20, 3, 4, 5, 6])
     elif cmd == 'b0':
         lcd.writeArabic(chr(2)+chr(1)+chr(0))
     elif cmd == 't':
@@ -86,4 +92,5 @@ while True:
 
     time.sleep(0.5)
 
-com.close()
+if com:
+    com.close()
