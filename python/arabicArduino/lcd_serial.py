@@ -3,6 +3,8 @@ from serial import Serial
 from .utils import *
 from typing import List
 
+__all__ = ['LCD']
+
 DEBUG = 1
 
 class LCD:
