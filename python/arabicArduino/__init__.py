@@ -17,24 +17,29 @@ class LCD:
         raw = cmd.encode()
         if not isinstance(data, bytearray):
             data = bytearray(data)
-        self.send(raw + data + '\0\n'.encode())
+        self.send(raw + data + '\n'.encode())
 
-    def _cmd(self, s:str):
-        self.send(s.strip() + '\n')
+    def send_cmdSafe(self, cmd:str, data:List):
+        data = [(i << 1)+1 for i in data]
+        self.send_cmd(cmd, data)
+
+    # def _cmd(self, s:str):
+    #     self.send(s.strip() + '\n')
 
     def ccg(self, index:int, chars:List[int]):
         "set a custom char new graphic"
         while len(chars) < 8: chars += [0]
         chars = chars[:8]
         data = [index] + chars
-        data = [(i << 1)+1 for i in data] 
-        self.send_cmd('ccg', data)
+        # data = [(i << 1)+1 for i in data] 
+        self.send_cmdSafe('ccg', data)
         sleep(0.5)
 
     def gotoxy(self, x:int, y:int):
         # self.cmd('goto')
         # self.send(chr((x<<1) + 1) + chr((y << 1) + 1))
-        self.send_cmd('@xy', [(x<<1) + 1, (y << 1) + 1])
+        # self.send_cmd('@xy', [(x<<1) + 1, (y << 1) + 1])
+        self.send_cmdSafe('@xy', [x,y])
         sleep(0.5)
     
     def writeln(self, s:str):
@@ -49,8 +54,9 @@ class LCD:
         # data = ''.join([ chr( (ord(i)<<1)+1 ) for i in arabic_str ])
         arabic_str.reverse()
         data = [len(arabic_str)] + arabic_str
-        data = [(i << 1)+1 for i in data] 
-        self.send_cmd('prA', data)
+        # data = [(i << 1)+1 for i in data] 
+        # self.send_cmd('prA', data)
+        self.send_cmdSafe('prA', data)
 
     def displayA(self, arabicWord: str):
         arabicWord = arabicWord.strip()
@@ -74,7 +80,7 @@ class LCD:
             # sleep(0.2)
 
         # self.gotoxy(0,0)
-        sleep(3)
+        sleep(0.5)
         print('writing Arabic:', txt)
         self.writeArabic(txt)
 
