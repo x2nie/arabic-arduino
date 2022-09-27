@@ -1,4 +1,34 @@
 ligatures = {
+  "ARABIC LIGATURE LAM WITH ALEF MAKSURA ISOLATED FORM" : {
+    "unicode": 0xFC43,
+    "compose": [' ','ل', 'ى', ' '],
+    "preview": "ﱃ",
+    "plane": [
+      0b00001,
+      0b00001,
+      0b00001,
+      0b00001,
+      0b11101,
+      0b10111,
+      0b10000,
+      0b11111,
+    ],
+  },
+  "ARABIC LIGATURE LAM WITH ALEF MAKSURA FINAL FORM" : {
+    "unicode": 0xFC86,
+    "compose": ['ل', 'ى', ' '],
+    "preview": "ﲆ",
+    "plane": [
+      0b00001,
+      0b00001,
+      0b00001,
+      0b00001,
+      0b11101,
+      0b10111,
+      0b10000,
+      0b11111,
+    ],
+  },
   "ARABIC LIGATURE LAM WITH YEH FINAL FORM" : {
     "unicode": 0xFC87,
     "compose": ['ل', 'ي', ' '],
