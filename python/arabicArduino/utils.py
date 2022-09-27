@@ -1,6 +1,7 @@
 from typing import List
 import unicodedata
 from .arabic_letters import individual_letters
+from .arabic_ligatures import ligatures
 
 # https://www.compart.com/en/unicode/block/U+FE70
 # FIRST_HARAKAH = 0xFE70 
@@ -8,7 +9,9 @@ from .arabic_letters import individual_letters
 FIRST_ARABIC = 0x0621 #HAMZAH
 LAST_ARABIC = 0x064A #YEH
 
-
+def spell(words:str):
+    for s in words:
+        print('\t', s, unicodedata.name(s))
 
 def gundul(arabic_str:str)->str:
     print('  *** A 1:',FIRST_ARABIC)
@@ -48,6 +51,33 @@ def get_plane(unicodeName:str, expectedPosition:str)->List[int]:
         else:
             raise Exception('unknown plane:', str(plane))
     return plane
+
+
+def apply_ligatures(arabic_str:str)-> str:
+    arabic_str = ' %s ' % arabic_str.strip()    #? ligature need trailing & prefix
+    for lig in ligatures.values():
+        match = lig['composed']
+        print(' >match:', match)
+        pos = arabic_str.find( match )
+        if pos >= 0:
+            count = len(match)
+            #? replace chars with a ligature
+            #? we can't use a simple str.replace() here because 
+            #? arabic ligature is aware of space (initial, final)
+            if match.startswith(' '):
+                pos += 1
+                count -= 1
+            if match.endswith(' '):
+                count -= 1
+            arabic_str = arabic_str[:pos] + lig['preview'] + arabic_str[pos+count]
+
+    return arabic_str
+            
+
+def transformA2byte(arabic_str:str, CGROM:list)->list:
+    "convert arabic string to byte-of-cgrom-index"
+    arabic_str = arabic_str.strip()
+
 
 
 def ccgs(arabic_str:str)->list:

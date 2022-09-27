@@ -15,7 +15,7 @@ ligatures = {
     ],
   },
   "ARABIC LIGATURE ALLAH ISOLATED FORM" : {
-    "compose": ['ا', 'ل', 'ل', 'هِ', ' '],
+    "compose": [' ', 'ا', 'ل', 'ل', 'ه', ' '],
     "preview": "ﷲ",
     "unicode": 0xFDF2,
     "plane": [
@@ -40,3 +40,9 @@ ligatures = {
     ],
   },
 }
+
+
+# preparing for string replace() later on LCD class
+for key in ligatures:
+  l = ligatures[key]
+  l['composed'] = ''.join(l['compose'])
