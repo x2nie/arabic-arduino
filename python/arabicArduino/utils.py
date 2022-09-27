@@ -57,7 +57,7 @@ def apply_ligatures(arabic_str:str)-> str:
     arabic_str = ' %s ' % arabic_str.strip()    #? ligature need trailing & prefix
     for lig in ligatures.values():
         match = lig['composed']
-        print(' >match:', match)
+        print(' >before',arabic_str, '. >match:', match)
         pos = arabic_str.find( match )
         if pos >= 0:
             count = len(match)
@@ -69,8 +69,12 @@ def apply_ligatures(arabic_str:str)-> str:
                 count -= 1
             if match.endswith(' '):
                 count -= 1
-            arabic_str = arabic_str[:pos] + lig['preview'] + arabic_str[pos+count]
+            print('  @pos:',pos, 'count:',count, 'replacement:', lig['preview'])
+            print('  $', repr(arabic_str[:pos]), '$', repr(arabic_str[pos+count:]) )
+            arabic_str = arabic_str[:pos] + lig['preview'] + arabic_str[pos+count:]
 
+        print(' =>after:', arabic_str, '\n')
+        
     return arabic_str
             
 
