@@ -233,4 +233,35 @@
       0b01100,
     ],
   },
+   "ARABIC LETTER SAD" : {
+    "isolated": [
+      0b00000,
+      0b00000,
+      0b01000,
+      0b01111,
+      0b01001,
+      0b11111,
+      0b00000,
+      0b00000,
+    ],
+    "initial": 'isolated',
+    "medial": "isolated",
+    "final": "isolated",
+  },
+   "ARABIC LETTER AIN" : {
+    "isolated": [
+      0b00000,
+      0b00000,
+      0b00000,
+      0b00111,
+      0b00100,
+      0b11111,
+      0b00000,
+      0b00000,
+    ],
+    "initial": 'isolated',
+    "medial": "isolated",
+    "final": "isolated",
+  },
+  
 }

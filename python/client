@@ -2,7 +2,7 @@ import serial, time
 from arabicArduino import LCD,Console, gundul
 
 com = None # for later close
-if 1:
+if 0:
     com = serial.Serial('/dev/ttyUSB0',9600)
     com.timeout = 1
     lcd = LCD(com)

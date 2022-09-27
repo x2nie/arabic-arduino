@@ -10,6 +10,10 @@ DEBUG = 1
 class LCD:
     def __init__(self, ser:Serial) -> None:
         self.ser = ser
+        self._init_cgrom()
+        
+    def _init_cgrom(self):
+        self.CGROM = empty_CGROM()
 
     def send(self, s:bytearray):
         if DEBUG: print('   send->', s)
@@ -84,7 +88,7 @@ class LCD:
             # sleep(0.2)
 
         # self.gotoxy(0,0)
-        sleep(1)
+        sleep(2)
         print('writing Arabic:', txt)
         self.writeArabic(txt)
 
