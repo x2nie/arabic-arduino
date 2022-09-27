@@ -57,23 +57,26 @@ def apply_ligatures(arabic_str:str)-> str:
     arabic_str = ' %s ' % arabic_str.strip()    #? ligature need trailing & prefix
     for lig in ligatures.values():
         match = lig['composed']
-        print(' >before',arabic_str, '. >match:', match)
-        pos = arabic_str.find( match )
-        if pos >= 0:
-            count = len(match)
-            #? replace chars with a ligature
-            #? we can't use a simple str.replace() here because 
-            #? arabic ligature is aware of space (initial, final)
-            if match.startswith(' '):
-                pos += 1
-                count -= 1
-            if match.endswith(' '):
-                count -= 1
-            print('  @pos:',pos, 'count:',count, 'replacement:', lig['preview'])
-            print('  $', repr(arabic_str[:pos]), '$', repr(arabic_str[pos+count:]) )
-            arabic_str = arabic_str[:pos] + lig['preview'] + arabic_str[pos+count:]
+        while True:
+            pos = arabic_str.find( match )
+            if pos >= 0:
+                print(' >before',arabic_str, '. >match:', match)
+                count = len(match)
+                #? replace chars with a ligature
+                #? we can't use a simple str.replace() here because 
+                #? arabic ligature is aware of space (initial, final)
+                if match.startswith(' '):
+                    pos += 1
+                    count -= 1
+                if match.endswith(' '):
+                    count -= 1
+                print('  @pos:',pos, 'count:',count, 'replacement:', lig['preview'])
+                print('  $', repr(arabic_str[:pos]), '$', repr(arabic_str[pos+count:]) )
+                arabic_str = arabic_str[:pos] + lig['preview'] + arabic_str[pos+count:]
 
-        print(' =>after:', arabic_str, '\n')
+                print(' =>after:', arabic_str, '\n')
+            else:
+                break
         
     return arabic_str
             

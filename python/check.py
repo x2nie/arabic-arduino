@@ -9,7 +9,7 @@ def spells(arabic:str):
 
     print('~'*10)
     print(a)
-    
+
     print('='*10)
     spell(a)
 
@@ -17,5 +17,6 @@ def spells(arabic:str):
 # spells('بِسْمِ اللّٰهِ ')
 # spells(' اللهم صَلِّ عَلى مُحَمَّدٍ')
 # spells(' صلى الله عليه وسلم‎ ')
-spells(' صلى الله‎ ')
+# spells(' صلى الله‎ ')
+spells(' صلى الله عَلى مُحَمَّدٍ‎ ')
 
