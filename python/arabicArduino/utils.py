@@ -1,4 +1,4 @@
-from typing import List
+from typing import Dict, List
 import unicodedata
 from .arabic_letters import individual_letters
 from .arabic_ligatures import ligatures
@@ -98,12 +98,12 @@ def empty_CGROM()->list:
     CGROM = []
     for i in range(8):
         CGROM.append({ 
-            'charindex': None, 
-            'plane': None,
+            'active': False, 
+            'plane': [],
         })
     return CGROM
 
-def transformA2byte(arabic_str:str, CGROM:list)->list:
+def transformA2PlanesRTL(arabic_str:str)->List[List[int]]:
     "convert arabic string to byte-of-cgrom-index"
     arabic_str = arabic_str.strip()
     ret = []
@@ -138,6 +138,68 @@ def transformA2byte(arabic_str:str, CGROM:list)->list:
             if uName == 'ARABIC LETTER ALEF':
                 first = True
     return ret
+
+def build_CGROM(planes:List[List[int]], CGROM:List[Dict])->List[int]:
+    result = []
+    pendingPlanes:List[List[int]] = []
+    available = [cgrom['plane'] for cgrom in CGROM]     #? shadow for quick `in` operation
+    for i,request_plane in enumerate(planes):
+        if request_plane in available:
+            index = available.index(request_plane)
+            result.append(index)
+            CGROM[i]['active'] = True
+        elif isinstance(request_plane, str):
+            # result.append(str(request_plane))
+            result.append(ord(request_plane)) #? chr number of current char
+        elif request_plane in pendingPlanes:
+            pendingIndex = pendingPlanes.index(request_plane)
+            result.append(str(pendingIndex))
+        else:
+            #? insert new plan to CGROM
+            #* find empty slot
+            #* find an empty slot
+            for o,cgrom in enumerate(CGROM):
+                if len(cgrom['plane']) != 0: 
+                    continue
+                cgrom['active'] = True  #? mark as `used`
+                cgrom['plane'] = request_plane
+                available[o] = request_plane
+                result.append(o)
+                break
+            else:
+                #* if not meet any empty slot, reuse non active, but should be later
+                if request_plane in pendingPlanes:
+                    pendingIndex = pendingPlanes.index(request_plane)
+                else:
+                    pendingPlanes.append(request_plane)
+                    pendingIndex = pendingPlanes.index(request_plane)
+                result.append(str(pendingIndex)) 
+                # if cgrom['charindex'] is None:
+    #? resolve pending planes
+    print('PENDING:', pendingPlanes )
+    for i,pending_plane in enumerate(pendingPlanes):
+        #? insert new plan to CGROM
+        #* find a non-actice plane
+        for o,cgrom in enumerate(CGROM):
+            if cgrom['active'] == True: 
+                continue
+            cgrom['active'] = True  #? mark as `used`
+            cgrom['plane'] = pending_plane
+            # result.append(o)
+            replacing = str(i)  #? pending chr
+            replacement = o     #? cgrom index
+            for r,res in enumerate(result):
+                if res == replacing:
+                    result[r] = replacement
+            break
+        else:
+            replacing = str(i)  #? pending chr
+            for r,res in enumerate(result):
+                if res == replacing:
+                    result[r] = 'not-enough-for:'+replacing
+
+    return result
+
 
 def print_2x2(planes:list):
     LROM = planes #[self.ROM[i] if i != ord(' ') else ' ' for i in planes]

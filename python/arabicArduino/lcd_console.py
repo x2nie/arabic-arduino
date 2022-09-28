@@ -17,7 +17,7 @@ class Console(LCD):
         elif cmd == 'prA':
             w = data[0]
             data = data[1:w+1]
-            LROM = [self.ROM[i] if i != ord(' ') else ' ' for i in data]
+            LROM = [self.ROM[i] if i != ord(' ') else ' ' for i in data if isinstance(i, int)]
             for L in range(8):
                 s = ''
                 for c in range(len(LROM)):
