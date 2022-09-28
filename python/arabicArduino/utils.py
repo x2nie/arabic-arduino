@@ -130,7 +130,10 @@ def transformA2PlanesRTL(arabic_str:str)->List[List[int]]:
                     position = 'isolated'
                 # elif i==0:
                 elif first:
-                    position = 'initial'
+                    if i < len(word) -1:
+                        position = 'initial'
+                    else:
+                        position = 'isolated'
                     first = False
                 # elif c == ' ':
                 #     ret.append(' ')
@@ -142,7 +145,7 @@ def transformA2PlanesRTL(arabic_str:str)->List[List[int]]:
                     position = 'medial'
                 ccg,breaker = get_plane(uName, expectedPosition= position)
                 ret.append(ccg)
-                
+
                 if breaker:         #? back to initial form
                     first = True
             elif uName in ligatures:

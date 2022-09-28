@@ -319,21 +319,7 @@
     ],
     "final": "isolated",
   },   
-  "ARABIC LETTER SAD" : {
-    "isolated": [
-      0b00000,
-      0b00000,
-      0b01000,
-      0b01111,
-      0b01001,
-      0b11111,
-      0b00000,
-      0b00000,
-    ],
-    "initial": 'isolated',
-    "medial": "isolated",
-    "final": "isolated",
-  },
+ 
    "ARABIC LETTER AIN" : {
     "isolated": [
       0b00000,
@@ -418,5 +404,38 @@
     "medial": "isolated",
     "final": "isolated",
   },
-  
+   "ARABIC LETTER WAW" : {
+    "breaker": True,
+    "isolated": [
+      0b00000,
+      0b00000,
+      0b00000,
+      0b01110,
+      0b01010,
+      0b01110,
+      0b00010,
+      0b01110,
+    ],
+    "initial": 'isolated',
+    "medial": [
+      0b00000,
+      0b00000,
+      0b00000,
+      0b11100,
+      0b10100,
+      0b11111,
+      0b00100,
+      0b11100,
+    ],
+    "final": [
+      0b00000,
+      0b00000,
+      0b00000,
+      0b01110,
+      0b01010,
+      0b01111,
+      0b00010,
+      0b01110,
+    ],
+  },
 }
