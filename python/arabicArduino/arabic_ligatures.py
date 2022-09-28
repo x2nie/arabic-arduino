@@ -104,6 +104,21 @@ ligatures = {
       0b01111,0b11111 ,
     ],
   },
+  "ARABIC LIGATURE LAM WITH HEH INITIAL FORM" : {
+    "compose": ['ل', 'ه'],
+    "preview": "ﳍ",
+    "unicode": 0xFCCD,
+    "plane": [
+      0b00001,
+      0b00001,
+      0b00001,
+      0b11101,
+      0b10101,
+      0b11111,
+      0b10100,
+      0b11100
+    ],
+  }
 }
 
 
