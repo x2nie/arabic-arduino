@@ -44,6 +44,21 @@ private_ligatures = {
       0b01100,
     ],
   },  
+   "VARIATION SELECTOR-20" : { 'name':
+  '''ALEF WITH LAM MIDDLE FORM''',
+    "unicode": '\U000e0103',
+    "compose": ['ا', 'ل'],
+    "plane": [
+      0b01010,
+      0b01010,
+      0b01010,
+      0b01010,
+      0b01010,
+      0b11011,
+      0b00000,
+      0b00000,
+    ],
+  },  
 }
 
 
