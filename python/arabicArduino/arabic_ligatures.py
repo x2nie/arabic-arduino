@@ -1,6 +1,6 @@
 ligatures = {
   "ARABIC LIGATURE LAM WITH ALEF MAKSURA ISOLATED FORM" : {
-    "unicode": 0xFC43,
+    "unicode": '\uFC43',
     "compose": [' ','ل', 'ى', ' '],
     "preview": "ﱃ",
     "plane": [
@@ -15,7 +15,7 @@ ligatures = {
     ],
   },
   "ARABIC LIGATURE LAM WITH ALEF MAKSURA FINAL FORM" : {
-    "unicode": 0xFC86,
+    "unicode": '\uFC86',
     "compose": ['ل', 'ى', ' '],
     "preview": "ﲆ",
     "plane": [
@@ -30,7 +30,7 @@ ligatures = {
     ],
   },
   "ARABIC LIGATURE LAM WITH YEH FINAL FORM" : {
-    "unicode": 0xFC87,
+    "unicode": '\uFC87',
     "compose": ['ل', 'ي', ' '],
     "preview": "ﲇ",
     "plane": [
@@ -47,7 +47,7 @@ ligatures = {
   "ARABIC LIGATURE ALLAH ISOLATED FORM" : {
     "compose": [' ', 'ا', 'ل', 'ل', 'ه', ' '],
     "preview": "ﷲ",
-    "unicode": 0xFDF2,
+    "unicode": '\uFDF2',
     "plane": [
       0b00000,0b10001,
       0b00000,0b11001,
@@ -82,7 +82,7 @@ ligatures = {
   "ARABIC LIGATURE MOHAMMAD ISOLATED FORM" : {
     "compose": [' ', 'م','ح','م','د', ' '],
     "preview": "ﷴ",
-    "unicode": 0xFDF4,
+    "unicode": '\uFDF4',
     "plane": [
       0b00101,0b11100,
       0b00101,0b10100,
@@ -107,7 +107,7 @@ ligatures = {
   "ARABIC LIGATURE LAM WITH HEH INITIAL FORM" : {
     "compose": ['ل', 'ه'],
     "preview": "ﳍ",
-    "unicode": 0xFCCD,
+    "unicode": '\uFCCD',
     "plane": [
       0b00001,
       0b00001,

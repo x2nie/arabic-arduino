@@ -3,7 +3,11 @@ from typing import Dict, List
 import unicodedata
 from .arabic_letters import individual_letters
 from .arabic_ligatures import ligatures
+from .arabic_private_ligatures import private_ligatures
 from .dotmatrix_2x3 import char_2x3
+
+#? merge ligatures
+ligatures.update(private_ligatures)
 
 # https://www.compart.com/en/unicode/block/U+FE70
 # FIRST_HARAKAH = 0xFE70 
@@ -86,9 +90,9 @@ def apply_ligatures(arabic_str:str)-> str:
                     count -= 1
                 if match.endswith(' '):
                     count -= 1
-                print('  @pos:',pos, 'count:',count, 'replacement:', lig['preview'])
+                print('  @pos:',pos, 'count:',count, 'replacement:', lig['unicode'])
                 print('  $', repr(arabic_str[:pos]), '$', repr(arabic_str[pos+count:]) )
-                arabic_str = arabic_str[:pos] + lig['preview'] + arabic_str[pos+count:]
+                arabic_str = arabic_str[:pos] + lig['unicode'] + arabic_str[pos+count:]
 
                 print(' =>after:', arabic_str, '\n')
             else:
@@ -137,6 +141,7 @@ def transformA2PlanesRTL(arabic_str:str)->List[List[int]]:
             elif uName in ligatures:
                 planes = get_ligature_plane(uName)
                 ret.extend(planes)
+                first = False
             if uName == 'ARABIC LETTER ALEF':
                 first = True
     return ret
