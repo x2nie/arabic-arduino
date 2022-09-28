@@ -36,27 +36,31 @@ def gundul(arabic_str:str)->str:
 def get_plane(unicodeName:str, expectedPosition:str)->List[int]:
     "Return an ccg plane (byteArray)"
     initialExpected = expectedPosition
+    position = expectedPosition
     block = individual_letters.get(unicodeName,None)
+    breaker = False
     if not block:
-        return None
+        return (breaker,None)
+    breaker = block.get('breaker', False)
     while True:
-        space = ' ~> ' if initialExpected != expectedPosition else ''
+        space = ' ~> ' if initialExpected != position else ''
         print('\t\t %s unicodeName:' % space, unicodeName, 'expectedPosition:',expectedPosition)
-        plane = block.get(expectedPosition)
+        plane = block.get(position)
         if plane is None: 
-            if expectedPosition != 'isolated':
-                expectedPosition = 'isolated'
+            if position != 'isolated':
+                position = 'isolated'
             else:
                 # isolated should never be empty
                 # empty = no char
                 break
         elif isinstance(plane, str):
-            expectedPosition = plane
+            position = plane
         elif isinstance(plane, list):
             break
         else:
             raise Exception('unknown plane:', str(plane))
-    return plane
+    # return plane
+    return (plane, breaker)
 
 def get_ligature_plane(unicodeName:str)->list:
     lig = ligatures[unicodeName]
@@ -110,7 +114,7 @@ def empty_CGROM()->list:
     return CGROM
 
 def transformA2PlanesRTL(arabic_str:str)->List[List[int]]:
-    "convert arabic string to byte-of-cgrom-index"
+    "convert arabic string into list of cgrom"
     arabic_str = arabic_str.strip()
     ret = []
     arabic_str = arabic_str.strip()
@@ -128,22 +132,25 @@ def transformA2PlanesRTL(arabic_str:str)->List[List[int]]:
                 elif first:
                     position = 'initial'
                     first = False
-                elif c == ' ':
-                    ret.append(' ')
-                    first = True
-                    continue
+                # elif c == ' ':
+                #     ret.append(' ')
+                #     first = True
+                #     continue
                 elif i==len(word)-1:
                     position = 'final'
                 else:
                     position = 'medial'
-                ccg = get_plane(uName, position)
+                ccg,breaker = get_plane(uName, expectedPosition= position)
                 ret.append(ccg)
+                
+                if breaker:         #? back to initial form
+                    first = True
             elif uName in ligatures:
                 planes = get_ligature_plane(uName)
                 ret.extend(planes)
                 first = False
-            if uName == 'ARABIC LETTER ALEF':
-                first = True
+            # if uName == 'ARABIC LETTER ALEF':
+            #     first = True
     return ret
 
 def build_CGROM(planes:List[List[int]], CGROM:List[Dict])->List[int]:
