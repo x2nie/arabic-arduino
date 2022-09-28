@@ -1,7 +1,9 @@
+import math
 from typing import Dict, List
 import unicodedata
 from .arabic_letters import individual_letters
 from .arabic_ligatures import ligatures
+from .dotmatrix_2x3 import char_2x3
 
 # https://www.compart.com/en/unicode/block/U+FE70
 # FIRST_HARAKAH = 0xFE70 
@@ -147,7 +149,7 @@ def build_CGROM(planes:List[List[int]], CGROM:List[Dict])->List[int]:
         if request_plane in available:
             index = available.index(request_plane)
             result.append(index)
-            CGROM[i]['active'] = True
+            CGROM[index]['active'] = True
         elif isinstance(request_plane, str):
             # result.append(str(request_plane))
             result.append(ord(request_plane)) #? chr number of current char
@@ -220,6 +222,56 @@ def print_2x2(planes:list):
                         s += '0'
                 s += '  '
         print(s.replace('0','░░').replace('1','██'))
+
+
+def print_LR_2x3(planes:list):
+    "print planes from left to right with 2x3 dot per-char"
+    rows_count = math.ceil(8.0/3.0)*3   #* should be 9
+    
+    #* draw bitmap
+    rows = [0] * rows_count
+    for x in range(len(planes)):
+        #? SHL
+        for y in range(rows_count):
+            rows[y] = rows[y] << 6
+
+        p = planes[x]
+        if isinstance(p, list):
+            while len(p) < rows_count:
+                p.append(0)
+        if not isinstance(p, list):
+            pass
+        else:
+            #? draw.
+            for y in range(rows_count):
+                rows[y] += p[y]
+
+
+
+
+        # print('-'*20)
+        # for yy in range(rows_count): 
+        #     print(bin(rows[yy]))
+        # print('='*20)
+        # print()
+
+
+    # for yy in range(rows_count): 
+    #     print(bin(rows[yy]))
+
+    bitmap_width = len(planes) * (5+1)  #? 1 = gap between lcd char
+    for yy in range(0,rows_count,3): #*[0,3,6]
+        s = ''
+        for xx in range(bitmap_width-2, -2,-2):
+            n = 0
+            for y in range(3):
+                n += ((rows[yy+y] >> (xx)) & 0b11) << (y*2)
+                # print(bin(n),'=',n,'> ', char_2x3[n])
+            s += char_2x3[n][1]
+            # print('^^^^^ xx:',xx,' n:',n, char_2x3[n])
+        # print(s)
+        print(repr(s))
+        # break 
 
 def ccgs(arabic_str:str)->list:
     ret = []
