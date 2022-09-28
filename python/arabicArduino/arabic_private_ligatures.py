@@ -29,6 +29,21 @@ private_ligatures = {
       0b01010,
     ],
   },  
+  "VARIATION SELECTOR-19" : { 'name':
+  '''REH WITH ALEF''',
+    "unicode": '\U000e0102',
+    "compose": ['ر', 'ا' ],
+    "plane": [
+      0b10000,
+      0b10000,
+      0b10000,
+      0b10000,
+      0b10001,
+      0b10010,
+      0b00010,
+      0b01100,
+    ],
+  },  
 }
 
 
