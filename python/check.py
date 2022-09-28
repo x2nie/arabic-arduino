@@ -31,7 +31,8 @@ def spells(arabic:str):
     for p in planes:
         print(repr(p))
     planes.reverse()
-    print_2x2(planes)
+    # print_2x2(planes)
+    print()
 
     print_LR_2x3(planes)
 
@@ -103,4 +104,6 @@ def spells2(arabic:str):
 # spells(' صلى الله عَلى مُحَمَّدٍ‎ ')
 # spells('بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ')
 # spells('اَلْحَمْدُ لِلّٰهِ رَبِّ الْعٰلَمِيْنَ')
-spells('مٰلِكِ يَوْمِ الدِّيْنِ')
+# spells('مٰلِكِ يَوْمِ الدِّيْنِ')
+# spells('اِيَّاكَ نَعْبُدُ وَاِيَّاكَ نَسْتَعِيْنُ')
+spells('اِهْدِنَا الصِّرَاطَ الْمُسْتَقِيْمَ')

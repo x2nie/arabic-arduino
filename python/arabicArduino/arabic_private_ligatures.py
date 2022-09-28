@@ -14,6 +14,21 @@ private_ligatures = {
       0b00000,
     ],
   },  
+  "VARIATION SELECTOR-18" : { 'name':
+  '''YEH WITH ALEF INITIAL FORM''',
+    "unicode": '\U000e0101',
+    "compose": [' ', 'ي', 'ا' ],
+    "plane": [
+      0b01000,
+      0b01000,
+      0b01000,
+      0b01001,
+      0b01001,
+      0b01111,
+      0b00000,
+      0b01010,
+    ],
+  },  
 }
 
 
