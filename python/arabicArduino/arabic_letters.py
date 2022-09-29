@@ -324,7 +324,7 @@
     ],
     "final": "isolated",
   },   
-   "ARABIC LETTER YEH" : {
+  "ARABIC LETTER YEH" : {
     "isolated": [
       0b00000,
       0b00011,
@@ -835,5 +835,29 @@
       0b00000,
       0b00000,
     ],
+  },   
+  "ARABIC LETTER YEH WITH HAMZA ABOVE" : {
+    "isolated": [
+      0b01100,
+      0b11000,
+      0b00011,
+      0b00100,
+      0b10111,
+      0b10001,
+      0b11111,
+      0b00000,
+    ],
+    
+    "medial": [
+      0b00000,
+      0b00110,
+      0b01100,
+      0b00000,
+      0b00100,
+      0b11111,
+      0b00000,
+      0b00000,
+    ],
+    "final": "isolated",
   },   
 }

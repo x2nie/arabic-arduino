@@ -13,6 +13,13 @@ breakers = [' ']
 for name,letter in individual_letters.items():
     if letter.get('breaker'):
         breakers.append(unicodedata.lookup(name))
+
+for name,lig in ligatures.items():
+    if lig.get('breaker'):
+        breakers.append(lig['unicode'])
+    elif lig['composed'][-1] != ' ':
+        if lig['composed'][-1] in breakers:
+            breakers.append(lig['unicode'])
 print('breakers:', breakers)
 
 # https://www.compart.com/en/unicode/block/U+FE70
@@ -50,10 +57,10 @@ def get_plane(unicodeName:str, expectedPosition:str)->List[int]:
     initialExpected = expectedPosition
     position = expectedPosition
     block = individual_letters.get(unicodeName,None)
-    breaker = False
+    # breaker = False
     if not block:
         return (breaker,None)
-    breaker = block.get('breaker', False)
+    # breaker = block.get('breaker', False)
     while True:
         space = ' ~> ' if initialExpected != position else ''
         # print('\t\t %s unicodeName:' % space, unicodeName, 'expectedPosition:',expectedPosition)
@@ -71,8 +78,8 @@ def get_plane(unicodeName:str, expectedPosition:str)->List[int]:
             break
         else:
             raise Exception('unknown plane:', str(plane))
-    # return plane
-    return (plane, breaker)
+    return plane
+    # return (plane, breaker)
 
 def get_ligature_plane(unicodeName:str)->list:
     lig = ligatures[unicodeName]
@@ -133,6 +140,26 @@ def apply_continued_ligatures(arabic_str:str, pattern:str, unicode_char: str)-> 
         pos = arabic_str.find( match, pos+1 )
     return arabic_str
 
+def apply_middle_ligatures(arabic_str:str, pattern:str, unicode_char: str)-> str:
+    "apply when ligature.pattern requests as middle"
+    match = pattern.strip('+ ')
+    count = len(match)
+    start = 0
+    pos = arabic_str.find( match, start )
+    while pos >= 0:
+        print(' >before',arabic_str, '. >match:', match)
+        #? replace chars with a ligature
+        #? we can't use a simple str.replace() here because 
+        #? arabic ligature is aware of space (initial, final)
+        if arabic_str[pos -1 ] not in breakers and arabic_str[pos + count ] != ' ':
+            print('  @pos:',pos, 'count:',count, 'replacement:', unicode_char)
+            print('  $', repr(arabic_str[:pos]), '$', repr(arabic_str[pos+count:]) )
+            arabic_str = arabic_str[:pos] + unicode_char + arabic_str[pos+count:]
+
+            print(' =>after:', arabic_str, '\n')
+        pos = arabic_str.find( match, pos+1 )
+    return arabic_str
+
 
 def apply_ligatures(arabic_str:str)-> str:
     arabic_str = ' %s ' % arabic_str.strip()    #? ligature need trailing & prefix
@@ -142,10 +169,13 @@ def apply_ligatures(arabic_str:str)-> str:
         final_form = match.endswith(' ')
         medial_form = not initial_form and not final_form
         isolated_form = initial_form and final_form
-        force_midle_form = match.startswith('+')
+        force_continue_form = match.startswith('+')
+        force_midle_form = force_continue_form and match.endswith('+')
         if initial_form or isolated_form:
             arabic_str = apply_breaked_ligatures(arabic_str, match, lig['unicode'])
         elif force_midle_form:
+            arabic_str = apply_middle_ligatures(arabic_str, match, lig['unicode'])
+        elif force_continue_form:
             arabic_str = apply_continued_ligatures(arabic_str, match, lig['unicode'])
         else:
             pos = arabic_str.find( match )
@@ -208,17 +238,18 @@ def transformA2PlanesRTL(arabic_str:str)->List[List[int]]:
                     position = 'final'
                 else:
                     position = 'medial'
-                ccg,breaker = get_plane(uName, expectedPosition= position)
+                ccg = get_plane(uName, expectedPosition= position)
                 ret.append(ccg)
 
-                if breaker:         #? back to initial form
-                    first = True
+                # if breaker:         #? back to initial form
+                #     first = True
             elif uName in ligatures:
                 planes = get_ligature_plane(uName)
                 ret.extend(planes)
                 first = False
             # if uName == 'ARABIC LETTER ALEF':
-            #     first = True
+            if c in breakers:
+                first = True
     return ret
 
 def build_CGROM(planes:List[List[int]], CGROM:List[Dict])->List[int]:
