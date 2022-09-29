@@ -206,7 +206,7 @@ ligatures = {
     ],
   }, 
   "ARABIC LIGATURE LAM WITH ALEF ISOLATED FORM" : {
-    "compose": [ 'ل',  'ا',   ' '],
+    "compose": [ 'ل',  'ا', ],
     "preview": "󠄀ﻻ",
     "unicode": '\uFEFB',
     "plane": [
@@ -220,6 +220,22 @@ ligatures = {
       0b00000,
     ],
    
+  },
+    
+  "ARABIC LIGATURE YEH WITH NOON FINAL FORM" : {
+    "compose": ['+', 'ي', 'ن', ' '],
+    "preview": "󠄀ﲔ",
+    "unicode": '\uFC94',
+    "plane": [
+      0b00000,0b00000,
+      0b00000,0b00000,
+      0b00000,0b00000,
+      0b00100,0b00100,
+      0b10001,0b11100,
+      0b10001,0b00111,
+      0b11111,0b00000,
+      0b00000,0b10100,
+    ],
   },
 }
 

@@ -111,6 +111,28 @@ def apply_breaked_ligatures(arabic_str:str, pattern:str, unicode_char: str)-> st
         pos = arabic_str.find( match, pos+1 )
     return arabic_str
 
+def apply_continued_ligatures(arabic_str:str, pattern:str, unicode_char: str)-> str:
+    "apply when ligature.pattern is NOT (starts with a space | breaker)"
+    match = pattern.lstrip('+ ')
+    start = 0
+    pos = arabic_str.find( match, start )
+    while pos >= 0:
+        print(' >before',arabic_str, '. >match:', match)
+        count = len(match)
+        #? replace chars with a ligature
+        #? we can't use a simple str.replace() here because 
+        #? arabic ligature is aware of space (initial, final)
+        if not arabic_str[pos -1 ] in breakers:
+            if match.endswith(' '):
+                count -= 1
+            print('  @pos:',pos, 'count:',count, 'replacement:', unicode_char)
+            print('  $', repr(arabic_str[:pos]), '$', repr(arabic_str[pos+count:]) )
+            arabic_str = arabic_str[:pos] + unicode_char + arabic_str[pos+count:]
+
+            print(' =>after:', arabic_str, '\n')
+        pos = arabic_str.find( match, pos+1 )
+    return arabic_str
+
 
 def apply_ligatures(arabic_str:str)-> str:
     arabic_str = ' %s ' % arabic_str.strip()    #? ligature need trailing & prefix
@@ -120,8 +142,11 @@ def apply_ligatures(arabic_str:str)-> str:
         final_form = match.endswith(' ')
         medial_form = not initial_form and not final_form
         isolated_form = initial_form and final_form
+        force_midle_form = match.startswith('+')
         if initial_form or isolated_form:
             arabic_str = apply_breaked_ligatures(arabic_str, match, lig['unicode'])
+        elif force_midle_form:
+            arabic_str = apply_continued_ligatures(arabic_str, match, lig['unicode'])
         else:
             pos = arabic_str.find( match )
             while  pos >= 0:
