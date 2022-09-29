@@ -1,6 +1,7 @@
 import math
 from typing import Dict, List
 import unicodedata
+
 from .arabic_letters import individual_letters
 from .arabic_ligatures import ligatures
 from .arabic_private_ligatures import private_ligatures
@@ -8,6 +9,11 @@ from .dotmatrix_2x3 import char_2x3
 
 #? merge ligatures
 ligatures.update(private_ligatures)
+breakers = [' ']
+for name,letter in individual_letters.items():
+    if letter.get('breaker'):
+        breakers.append(unicodedata.lookup(name))
+print('breakers:', breakers)
 
 # https://www.compart.com/en/unicode/block/U+FE70
 # FIRST_HARAKAH = 0xFE70 
@@ -77,13 +83,42 @@ def get_ligature_plane(unicodeName:str)->list:
         return planes
 
 
+def apply_breaked_ligatures(arabic_str:str, pattern:str, unicode_char: str)-> str:
+    "apply when ligature.pattern starts with a space | breaker"
+    match = pattern.lstrip()
+    start = 0
+    pos = arabic_str.find( match, start )
+    while pos >= 0:
+        print(' >before',arabic_str, '. >match:', match)
+        count = len(match)
+        #? replace chars with a ligature
+        #? we can't use a simple str.replace() here because 
+        #? arabic ligature is aware of space (initial, final)
+        if arabic_str[pos -1 ] in breakers:
+            if match.endswith(' '):
+                count -= 1
+            print('  @pos:',pos, 'count:',count, 'replacement:', unicode_char)
+            print('  $', repr(arabic_str[:pos]), '$', repr(arabic_str[pos+count:]) )
+            arabic_str = arabic_str[:pos] + unicode_char + arabic_str[pos+count:]
+
+            print(' =>after:', arabic_str, '\n')
+        pos = arabic_str.find( match, pos+1 )
+    return arabic_str
+
+
 def apply_ligatures(arabic_str:str)-> str:
     arabic_str = ' %s ' % arabic_str.strip()    #? ligature need trailing & prefix
     for lig in ligatures.values():
-        match = lig['composed']
-        while True:
+        match:str = lig['composed']
+        initial_form = match.startswith(' ')
+        final_form = match.endswith(' ')
+        medial_form = not initial_form and not final_form
+        isolated_form = initial_form and final_form
+        if initial_form or isolated_form:
+            arabic_str = apply_breaked_ligatures(arabic_str, match, lig['unicode'])
+        else:
             pos = arabic_str.find( match )
-            if pos >= 0:
+            while  pos >= 0:
                 print(' >before',arabic_str, '. >match:', match)
                 count = len(match)
                 #? replace chars with a ligature
@@ -99,8 +134,7 @@ def apply_ligatures(arabic_str:str)-> str:
                 arabic_str = arabic_str[:pos] + lig['unicode'] + arabic_str[pos+count:]
 
                 print(' =>after:', arabic_str, '\n')
-            else:
-                break
+                pos = arabic_str.find( match, pos +1 )
         
     return arabic_str
 
