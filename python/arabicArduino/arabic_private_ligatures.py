@@ -1,7 +1,9 @@
-private_ligatures = {
-  "VARIATION SELECTOR-17" : { 'name':
-  '''ALEF WITH LAM INITIAL FORM''',
-    "unicode": '\U000e0100',
+private_ligatures = {}
+SELECTOR_START = 17   #? first use of UNICODE-NAME
+UNICODE_START = 0x000e0100
+
+temporary_ligatures = {
+  "ALEF WITH LAM INITIAL FORM": {
     "compose": [' ', 'ا', 'ل'],
     "plane": [
       0b01010,
@@ -14,9 +16,7 @@ private_ligatures = {
       0b00000,
     ],
   },  
-  "VARIATION SELECTOR-18" : { 'name':
-  '''ALEF WITH YEH WITH ALEF INITIAL FORM''',
-    "unicode": '\U000e0101',
+  "ALEF WITH YEH WITH ALEF INITIAL FORM": {
     "compose": [' ', 'ا',  'ي', 'ا' ],
     "plane": [
       0b10001,
@@ -39,8 +39,7 @@ private_ligatures = {
       0b01010,
     ],
   },  
-  "VARIATION SELECTOR-19" : { 'name':
-  '''REH WITH ALEF''',
+  "REH WITH ALEF":{
     "unicode": '\U000e0102',
     "compose": ['ر', 'ا' ],
     "plane": [
@@ -54,8 +53,7 @@ private_ligatures = {
       0b01100,
     ],
   },  
-   "VARIATION SELECTOR-20" : { 'name':
-  '''ALEF WITH LAM MIDDLE FORM''',
+   "ALEF WITH LAM MIDDLE FORM":{
     "unicode": '\U000e0103',
     "compose": ['ا', 'ل'],
     "plane": [
@@ -69,8 +67,7 @@ private_ligatures = {
       0b00000,
     ],
   },  
-  "VARIATION SELECTOR-21" : { 'name':
-  '''NOON WITH ALEF INITIAL FORM''',
+  "NOON WITH ALEF INITIAL FORM":{
     "unicode": '\U000e0104',
     "compose": [' ','ن' 'ا'],
     "plane": [
@@ -88,6 +85,10 @@ private_ligatures = {
 
 
 # preparing for string replace() later on LCD class
-for key in private_ligatures:
-  l = private_ligatures[key]
-  l['composed'] = ''.join(l['compose'])
+for i,name in enumerate(temporary_ligatures):
+  lig = temporary_ligatures[name]
+  lig['name'] = name
+  lig['unicode'] = chr(UNICODE_START+i)
+  lig['composed'] = ''.join(lig['compose'])
+  key = 'VARIATION SELECTOR-%s' % (SELECTOR_START + i)
+  private_ligatures[key] = lig

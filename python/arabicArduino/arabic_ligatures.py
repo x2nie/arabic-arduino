@@ -41,7 +41,7 @@ ligatures = {
       0b11101,
       0b10111,
       0b10000,
-      0b11111,
+      0b11011,
     ],
   },
   "ARABIC LIGATURE ALLAH ISOLATED FORM" : {

@@ -23,14 +23,20 @@ LAST_ARABIC = 0x064A #YEH
 
 def spell(words:str):
     for s in words:
-        print('\t', s, unicodedata.name(s))
+        name = unicodedata.name(s)
+        if name.startswith('VARIATION '):
+            s = ' '
+            lig = private_ligatures.get(name)
+            if lig and isinstance(lig, dict):
+                name = lig.get('name', name)
+        print('\t', s, name)
 
 def gundul(arabic_str:str)->str:
-    print('  *** A 1:',FIRST_ARABIC)
-    print('  *** A n:',LAST_ARABIC)
+    # print('  *** A 1:',FIRST_ARABIC)
+    # print('  *** A n:',LAST_ARABIC)
     ret = ''
     for c in arabic_str:
-        print('  *** C:',ord(c), '@',c ,'>>',ret)
+        # print('  *** C:',ord(c), '@',c ,'>>',ret)
         # if ord(c) < FIRST_HARAKAH or ord(c) > LAST_HARAKAH:
         if FIRST_ARABIC <= ord(c) <= LAST_ARABIC:
             ret += c
