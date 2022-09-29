@@ -56,7 +56,7 @@ def get_plane(unicodeName:str, expectedPosition:str)->List[int]:
     breaker = block.get('breaker', False)
     while True:
         space = ' ~> ' if initialExpected != position else ''
-        print('\t\t %s unicodeName:' % space, unicodeName, 'expectedPosition:',expectedPosition)
+        # print('\t\t %s unicodeName:' % space, unicodeName, 'expectedPosition:',expectedPosition)
         plane = block.get(position)
         if plane is None: 
             if position != 'isolated':
