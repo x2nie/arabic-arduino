@@ -5,7 +5,7 @@
  * sub files.
  */
  import * as utils from "./utils.js";
- async function app(TEMPLATES) {
+//  async function app(TEMPLATES) {
  
  
    // We show here how slots can be used to create generic components.
@@ -40,14 +40,23 @@
        this.state.val++;
      }
    }
+
+   class LedRow extends Component {
+    static template = "LedRow"
+   }
+ 
+
+   class Char extends Component {
+    static template = "Char"
+   }
  
    // Main root component
    class Root extends Component {
      static template = "Root"
-     static components = { Card, Counter };
+     static components = { Card, Counter, Char };
      
      setup() {
-       this.state = useState({a: 1, b: 3, data:[1,2,3,4]});
+       this.state = useState({a: 1, b: 3, data:[1,2,3,4], data2:[8,9,15,31]});
      }
  
      inc(key, delta) {
@@ -56,9 +65,9 @@
    }
  
    // Application setup
-   mount(Root, document.body, { templates: TEMPLATES, dev: true});
- 
- }
+//    mount(Root, document.body, { templates: TEMPLATES, dev: true});
+   
+// }
  
  /**
   * Initialization code
@@ -80,9 +89,10 @@
    } catch(e) {
      console.error(`This app requires a static server.  If you have python installed, try 'python app.py'`);
      return;
-   }
-   prepareOWLApp(templates);
-   app(templates);
+    }
+    prepareOWLApp(templates);
+    mount(Root, document.body, { templates: templates, dev: true});
+//    app(templates);
  }
  
  start();

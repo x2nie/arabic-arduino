@@ -18,12 +18,18 @@
     <t t-esc="state.val"/><button t-on-click="inc">Inc</button>
   </div>
 
-  <div t-name="Root" class="main">
+  
+ <div t-name="Char">
     <ul>
-     <t t-foreach="state.data" t-as="elem" t-key="elem">
+     <t t-foreach="props.data" t-as="elem" t-key="elem">
       <li><t t-esc="elem"/></li>
      </t>
     </ul>
+  </div>
+
+  <div t-name="Root" class="main">
+    <Char data="state.data" />
+    <Char data="state.data2" />
 
     <Card title="'Title card A'">
       <t t-set-slot="content">Content of card 1...  [<t t-esc="state.a"/>]</t>
