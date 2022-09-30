@@ -41,7 +41,12 @@
     <Char data="state.data2" /> -->
     <div class="lcd">
      <t t-foreach="state.planes" t-as="plane" t-key="plane_index">
+      <t t-if="plane.length > 0">
         <Char data="plane" />
+      </t>
+      <t t-else="">
+        <Char data="[0,0,0,0,0,0,0,0]" />
+      </t>
      </t>
      <div class="filler" />
      </div>

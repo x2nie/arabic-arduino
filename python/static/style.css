@@ -10,14 +10,16 @@ body {
     --led-color: black;
     --led-size: 5px;
     --led-gap:1px;
+    box-sizing: content-box;
+    max-width: calc( ( ( var(--led-size) + var(--led-gap) ) * 5 + var(--led-size) ) * 20 );
 }
 .filler {
     clear: both;
 }
 .char {
     /* display: inline-block; */
-    margin:var(--led-size);
-    margin-left: 0;
+    margin-left:var(--led-size);
+    margin-bottom:var(--led-size);
     float: right;
 }
 
