@@ -18,20 +18,35 @@
     <t t-esc="state.val"/><button t-on-click="inc">Inc</button>
   </div>
 
-  
- <div t-name="Char">
-    <ul>
-     <t t-foreach="props.data" t-as="elem" t-key="elem">
-      <li><t t-esc="elem"/></li>
+  <div t-name="Bit" class="bit" />
+
+  <div t-name="LedRow" class="row">
+      <!-- <span><t t-esc="props.value"/></span> -->
+      <t t-foreach="[4,3,2,1,0]" t-as="bit" t-key="bit_index">
+        <span t-attf-class="bit bit-#{(props.value >> bit) &amp; 1}"></span>
+
+      </t>
+  </div>
+
+
+  <div t-name="Char" class="char">
+      <!-- <li><t t-esc="elem"/></li> -->
+     <t t-foreach="props.data" t-as="num" t-key="num_index">
+      <LedRow value="num"/>
      </t>
-    </ul>
   </div>
 
   <div t-name="Root" class="main">
-    <Char data="state.data" />
-    <Char data="state.data2" />
+    <!-- <Char data="state.data" />
+    <Char data="state.data2" /> -->
+    <div class="lcd">
+     <t t-foreach="state.planes" t-as="plane" t-key="plane_index">
+        <Char data="plane" />
+     </t>
+     <div class="filler" />
+     </div>
 
-    <Card title="'Title card A'">
+    <!-- <Card title="'Title card A'">
       <t t-set-slot="content">Content of card 1...  [<t t-esc="state.a"/>]</t>
       <t t-set-slot="footer"><button t-on-click="() => this.inc('a', 1)">Increment A</button></t>
     </Card>
@@ -41,6 +56,6 @@
         <Counter />
       </t>
       <t t-set-slot="footer"><button t-on-click="() => this.inc('b', -1)">Decrement B</button></t>
-    </Card>
+    </Card> -->
   </div>
 </templates>
