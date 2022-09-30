@@ -169,6 +169,19 @@ temporary_ligatures = {
 
   },
  
+  "YEH WITH REH WITH ALEF CONTINUING":{
+    "compose": ['+', 'ي', 'ر', 'ا' ],
+    "plane": [
+      0b10000,0b00000,
+      0b10000,0b00000,
+      0b10000,0b00000,
+      0b10001,0b00100,
+      0b10001,0b11100,
+      0b10010,0b00111,
+      0b00010,0b00000,
+      0b01100,0b10100,
+    ],
+  },  
   "REH WITH ALEF":{
     "compose": ['ر', 'ا' ],
     "plane": [
