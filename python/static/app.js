@@ -76,7 +76,7 @@
  async function start() {
    let templates;
    try {
-     templates = await owl.loadFile('/static/app.xml');
+     templates = await owl.loadFile('/app.xml');
    } catch(e) {
      console.error(`This app requires a static server.  If you have python installed, try 'python app.py'`);
      return;
