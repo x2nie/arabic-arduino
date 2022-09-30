@@ -25,8 +25,12 @@ print('breakers:', breakers)
 # https://www.compart.com/en/unicode/block/U+FE70
 # FIRST_HARAKAH = 0xFE70 
 # LAST_HARAKAH = 0xFE7F 
-FIRST_ARABIC = 0x0621 #HAMZAH
-LAST_ARABIC = 0x064A #YEH
+FIRST_ARABIC = 0x0621   #* = 1569 HAMZAH
+LAST_ARABIC = 0x064A    #* = 1610 YEH
+WHITE_LIST = [
+    0x0671, #* ALEF WASLA
+
+]
 
 def spell(words:str):
     for s in words:
@@ -43,9 +47,9 @@ def gundul(arabic_str:str)->str:
     # print('  *** A n:',LAST_ARABIC)
     ret = ''
     for c in arabic_str:
-        # print('  *** C:',ord(c), '@',c ,'>>',ret)
+        print('  *** C:',ord(c), '[%s]' % unicodedata.name(c) , '@',c ,'>>',ret)
         # if ord(c) < FIRST_HARAKAH or ord(c) > LAST_HARAKAH:
-        if FIRST_ARABIC <= ord(c) <= LAST_ARABIC:
+        if (FIRST_ARABIC <= ord(c) <= LAST_ARABIC) or ord(c) in WHITE_LIST:
             ret += c
         elif c == ' ':
             ret += c

@@ -352,6 +352,32 @@ temporary_ligatures = {
       0b11111,
     ],
   },  
+  "FEH WITH YEH FINAL FORM":{
+    "compose": ['+', 'ف', 'ي', ' '],
+    "plane": [
+      0b10000,
+      0b00111,
+      0b00101,
+      0b00111,
+      0b00001,
+      0b11111,
+      0b10000,
+      0b11111,
+    ],
+  },  
+  "FEH WITH ALEF MAKSURA FINAL FORM":{
+    "compose": ['ف', 'ى', ' '],
+    "plane": [
+      0b10000,
+      0b00111,
+      0b00101,
+      0b00111,
+      0b00001,
+      0b11111,
+      0b10000,
+      0b11111,
+    ],
+  },  
   "ALEF WITH NOON MEDIAL FORM":{
     "compose": ['+',  'ا', 'ن', '+'],
     "plane": [
