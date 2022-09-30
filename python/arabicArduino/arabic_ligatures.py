@@ -205,22 +205,21 @@ ligatures = {
       0b10101,
     ],
   }, 
-  "ARABIC LIGATURE LAM WITH ALEF ISOLATED FORM" : {
-    "compose": [ 'ل',  'ا', ],
-    "preview": "󠄀ﻻ",
-    "unicode": '\uFEFB',
-    "plane": [
-      0b01010,
-      0b01010,
-      0b01110,
-      0b00100,
-      0b01110,
-      0b01010,
-      0b01110,
-      0b00000,
-    ],
-   
-  },
+  # !"ARABIC LIGATURE LAM WITH ALEF ISOLATED FORM" : {
+    # "compose": [ 'ل',  'ا', ],
+    # "preview": "󠄀ﻻ",
+    # "unicode": '\uFEFB',
+    # "plane": [
+    #   0b01010,
+    #   0b01010,
+    #   0b01110,
+    #   0b00100,
+    #   0b01110,
+    #   0b01010,
+    #   0b01110,
+    #   0b00000,
+    # ],
+  # },
     
   "ARABIC LIGATURE YEH WITH NOON FINAL FORM" : {
     "compose": ['+', 'ي', 'ن', ' '],

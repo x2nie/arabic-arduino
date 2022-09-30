@@ -100,13 +100,17 @@ def split_if_multiple(plane:list)->List[List[int]]:
         return planes
 
 
-def apply_breaked_ligatures(arabic_str:str, pattern:str, unicode_char: str)-> str:
+def apply_breaked_ligatures(arabic_str:str, lig:dict)-> str:
+# def apply_breaked_ligatures(arabic_str:str, pattern:str, unicode_char: str)-> str:
     "apply when ligature.pattern starts with a space | breaker"
+    pattern=lig['composed']
+    unicode_char = lig['unicode']
     match = pattern.lstrip()
     start = 0
     pos = arabic_str.find( match, start )
     while pos >= 0:
-        print(' >before',arabic_str, '. >match:', match)
+        # print('# apply_breaked_ligatures:', [repr(m) for m in match], '@', lig.get('name'))
+        # print(' >before',arabic_str, '. >match:', match)
         count = len(match)
         #? replace chars with a ligature
         #? we can't use a simple str.replace() here because 
@@ -114,11 +118,11 @@ def apply_breaked_ligatures(arabic_str:str, pattern:str, unicode_char: str)-> st
         if arabic_str[pos -1 ] in breakers:
             if match.endswith(' '):
                 count -= 1
-            print('  @pos:',pos, 'count:',count, 'replacement:', unicode_char)
-            print('  $', repr(arabic_str[:pos]), '$', repr(arabic_str[pos+count:]) )
+            # print('  @pos:',pos, 'count:',count, 'replacement:', unicode_char)
+            # print('  $', repr(arabic_str[:pos]), '$', repr(arabic_str[pos+count:]) )
             arabic_str = arabic_str[:pos] + unicode_char + arabic_str[pos+count:]
 
-            print(' =>after:', arabic_str, '\n')
+            # print(' =>after:', arabic_str, '\n')
         pos = arabic_str.find( match, pos+1 )
     return arabic_str
 
@@ -128,7 +132,8 @@ def apply_continued_ligatures(arabic_str:str, pattern:str, unicode_char: str)-> 
     start = 0
     pos = arabic_str.find( match, start )
     while pos >= 0:
-        print(' >before',arabic_str, '. >match:', match)
+        # print('# apply_continued_ligatures')
+        # print(' >before',arabic_str, '. >match:', match)
         count = len(match)
         #? replace chars with a ligature
         #? we can't use a simple str.replace() here because 
@@ -136,11 +141,11 @@ def apply_continued_ligatures(arabic_str:str, pattern:str, unicode_char: str)-> 
         if not arabic_str[pos -1 ] in breakers:
             if match.endswith(' '):
                 count -= 1
-            print('  @pos:',pos, 'count:',count, 'replacement:', unicode_char)
-            print('  $', repr(arabic_str[:pos]), '$', repr(arabic_str[pos+count:]) )
+            # print('  @pos:',pos, 'count:',count, 'replacement:', unicode_char)
+            # print('  $', repr(arabic_str[:pos]), '$', repr(arabic_str[pos+count:]) )
             arabic_str = arabic_str[:pos] + unicode_char + arabic_str[pos+count:]
 
-            print(' =>after:', arabic_str, '\n')
+            # print(' =>after:', arabic_str, '\n')
         pos = arabic_str.find( match, pos+1 )
     return arabic_str
 
@@ -151,16 +156,17 @@ def apply_middle_ligatures(arabic_str:str, pattern:str, unicode_char: str)-> str
     start = 0
     pos = arabic_str.find( match, start )
     while pos >= 0:
-        print(' >before',arabic_str, '. >match:', match)
+        # print('# apply_middle_ligatures')
+        # print(' >before',arabic_str, '. >match:', match)
         #? replace chars with a ligature
         #? we can't use a simple str.replace() here because 
         #? arabic ligature is aware of space (initial, final)
         if arabic_str[pos -1 ] not in breakers and arabic_str[pos + count ] != ' ':
-            print('  @pos:',pos, 'count:',count, 'replacement:', unicode_char)
-            print('  $', repr(arabic_str[:pos]), '$', repr(arabic_str[pos+count:]) )
+            # print('  @pos:',pos, 'count:',count, 'replacement:', unicode_char)
+            # print('  $', repr(arabic_str[:pos]), '$', repr(arabic_str[pos+count:]) )
             arabic_str = arabic_str[:pos] + unicode_char + arabic_str[pos+count:]
 
-            print(' =>after:', arabic_str, '\n')
+            # print(' =>after:', arabic_str, '\n')
         pos = arabic_str.find( match, pos+1 )
     return arabic_str
 
@@ -176,7 +182,8 @@ def apply_ligatures(arabic_str:str)-> str:
         force_continue_form = match.startswith('+')
         force_midle_form = force_continue_form and match.endswith('+')
         if initial_form or isolated_form:
-            arabic_str = apply_breaked_ligatures(arabic_str, match, lig['unicode'])
+            # arabic_str = apply_breaked_ligatures(arabic_str, match, lig['unicode'])
+            arabic_str = apply_breaked_ligatures(arabic_str, lig)
         elif force_midle_form:
             arabic_str = apply_middle_ligatures(arabic_str, match, lig['unicode'])
         elif force_continue_form:
@@ -184,7 +191,8 @@ def apply_ligatures(arabic_str:str)-> str:
         else:
             pos = arabic_str.find( match )
             while  pos >= 0:
-                print(' >before',arabic_str, '. >match:', match)
+                # print('# apply_ligatures!!')
+                # print(' >before',arabic_str, '. >match:', match)
                 count = len(match)
                 #? replace chars with a ligature
                 #? we can't use a simple str.replace() here because 
@@ -194,11 +202,11 @@ def apply_ligatures(arabic_str:str)-> str:
                     count -= 1
                 if match.endswith(' '):
                     count -= 1
-                print('  @pos:',pos, 'count:',count, 'replacement:', lig['unicode'])
-                print('  $', repr(arabic_str[:pos]), '$', repr(arabic_str[pos+count:]) )
+                # print('  @pos:',pos, 'count:',count, 'replacement:', lig['unicode'])
+                # print('  $', repr(arabic_str[:pos]), '$', repr(arabic_str[pos+count:]) )
                 arabic_str = arabic_str[:pos] + lig['unicode'] + arabic_str[pos+count:]
 
-                print(' =>after:', arabic_str, '\n')
+                # print(' =>after:', arabic_str, '\n')
                 pos = arabic_str.find( match, pos +1 )
 
     arabic_str = arabic_str.replace('  ',' ')    
