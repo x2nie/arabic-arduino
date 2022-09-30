@@ -59,7 +59,7 @@ def get_plane(unicodeName:str, expectedPosition:str)->List[int]:
     block = individual_letters.get(unicodeName,None)
     # breaker = False
     if not block:
-        return (breaker,None)
+        return (None)
     # breaker = block.get('breaker', False)
     while True:
         space = ' ~> ' if initialExpected != position else ''
@@ -84,11 +84,15 @@ def get_plane(unicodeName:str, expectedPosition:str)->List[int]:
 def get_ligature_plane(unicodeName:str)->list:
     lig = ligatures[unicodeName]
     plane = lig['plane']
+    return plane
+
+def split_if_multiple(plane:list)->List[List[int]]:
     if len(plane) <= 8:
         return [plane]
     else:
         count = len(plane) // 8 #? integer division
         planes = [[] for i in range(count)]
+        # planes = [[]] * count
         for y in range(8):
             for x in range(count):
                 planes[x].append( plane[ y * count +x ] )
@@ -196,7 +200,8 @@ def apply_ligatures(arabic_str:str)-> str:
 
                 print(' =>after:', arabic_str, '\n')
                 pos = arabic_str.find( match, pos +1 )
-        
+
+    arabic_str = arabic_str.replace('  ',' ')    
     return arabic_str
 
 def empty_CGROM()->list:
@@ -239,12 +244,14 @@ def transformA2PlanesRTL(arabic_str:str)->List[List[int]]:
                 else:
                     position = 'medial'
                 ccg = get_plane(uName, expectedPosition= position)
-                ret.append(ccg)
+                # ret.append(ccg)
+                ret.extend(split_if_multiple(ccg))
 
                 # if breaker:         #? back to initial form
                 #     first = True
             elif uName in ligatures:
-                planes = get_ligature_plane(uName)
+                plane = get_ligature_plane(uName)
+                planes = split_if_multiple(plane)
                 ret.extend(planes)
                 first = False
             # if uName == 'ARABIC LETTER ALEF':

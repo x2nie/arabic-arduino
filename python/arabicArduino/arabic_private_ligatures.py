@@ -103,7 +103,20 @@ temporary_ligatures = {
       0b01100,
     ],
   },  
-   "ALEF WITH LAM MIDDLE FORM":{
+  "ALEF WITH LAM WITH ALEF INITIAL FORM":{
+    "compose": [' ', 'ا', "󠄀ﻻ"],
+    "plane": [
+      0b10101,
+      0b10101,
+      0b11101,
+      0b01001,
+      0b11101,
+      0b10101,
+      0b11101,
+      0b00000,
+    ],
+  },  
+  "ALEF WITH LAM MIDDLE FORM":{
     "compose": ['ا', 'ل'],
     "plane": [
       0b01010,
@@ -205,6 +218,19 @@ temporary_ligatures = {
       0b11101,
       0b00100,
       0b11100,
+    ],
+  },  
+  "FEH WITH YEH ISOLATED FORM":{
+    "compose": [' ', 'ف', 'ي', ' '],
+    "plane": [
+      0b10000,
+      0b00111,
+      0b00101,
+      0b00111,
+      0b00001,
+      0b11111,
+      0b10000,
+      0b11111,
     ],
   },  
 }
