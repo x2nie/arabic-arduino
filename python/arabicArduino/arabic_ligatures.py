@@ -135,7 +135,7 @@ ligatures = {
     ],
   }, 
   "ARABIC LIGATURE LAM WITH MEEM INITIAL FORM" : {
-    "compose": [' ', 'ل', 'م'],
+    "compose": [' ', 'ل', 'م', '+'],
     # "preview": "󠄀ﲓ",
     "unicode": '\uFCCC',
     "plane": [
@@ -150,7 +150,7 @@ ligatures = {
     ],
   }, 
   "ARABIC LIGATURE LAM WITH MEEM MEDIAL FORM" : {
-    "compose": ['ل', 'م'],
+    "compose": ['+', 'ل', 'م', '+'],
     # "preview": "󠄀ﲓ",
     "unicode": '\uFCED',
     "plane": [

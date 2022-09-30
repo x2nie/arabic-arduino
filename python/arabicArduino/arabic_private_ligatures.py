@@ -53,6 +53,20 @@ temporary_ligatures = {
       0b00000,0b00000,
     ],
   },  
+  "ALEF WITH LAM WITH ALEF WITH HAMZA BELOW INITIAL FORM": {
+    "breaker": True,
+    "compose": [' ', 'ا', 'ل', 'إ' ],
+    "plane": [
+      0b00000,0b10101,
+      0b00000,0b10101,
+      0b00000,0b11101,
+      0b00000,0b01001,
+      0b00000,0b11101,
+      0b00000,0b10101,
+      0b00011,0b11101,
+      0b00110,0b00000,
+    ],
+  },    
   "ALEF WITH LAM WITH ALEF INITIAL FORM": {
     "breaker": True,
     "compose": [' ', 'ا', 'ل', 'ا'],
