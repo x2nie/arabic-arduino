@@ -47,7 +47,7 @@ def gundul(arabic_str:str)->str:
     # print('  *** A n:',LAST_ARABIC)
     ret = ''
     for c in arabic_str:
-        print('  *** C:',ord(c), '[%s]' % unicodedata.name(c) , '@',c ,'>>',ret)
+        # print('  *** C:',ord(c), '[%s]' % unicodedata.name(c) , '@',c ,'>>',ret)
         # if ord(c) < FIRST_HARAKAH or ord(c) > LAST_HARAKAH:
         if (FIRST_ARABIC <= ord(c) <= LAST_ARABIC) or ord(c) in WHITE_LIST:
             ret += c

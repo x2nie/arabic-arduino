@@ -108,6 +108,19 @@ temporary_ligatures = {
       0b00000,
     ],
   },  
+  "REH WITH HAH MIDDLE FORM": {
+    "compose": ['+', 'ا', 'ل', '+'],
+    "plane": [
+      0b01100,0b00101,
+      0b10010,0b00101,
+      0b00010,0b00101,
+      0b00010,0b00101,
+      0b11111,0b11101,
+      0b00000,0b10000,
+      0b00000,0b10000,
+      0b00000,0b10000,
+    ],
+  },  
   
   "ALEF WITH YEH WITH ALEF INITIAL FORM": {
     "breaker": True,
