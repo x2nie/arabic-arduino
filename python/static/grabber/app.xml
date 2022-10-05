@@ -1,0 +1,16 @@
+<templates>
+  
+<div t-name="Root" class="main">
+    <div class="wrapper">
+
+      <DndImage />
+    </div>
+     
+                <textarea></textarea>
+    
+    <div class="cp">
+
+    </div>
+</div>
+
+</templates>
