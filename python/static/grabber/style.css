@@ -1,15 +1,25 @@
 body{
     background-color: blanchedalmond;
+}
+* {
     margin:0;
     padding:0;
+    box-sizing: border-box;
 }
-.wrapper {
-    width: calc( 100vw - 305px);
-    height: calc( 100vh - 55px);
+.zoommable {
+    width:100%;
+    height: 100%;
+    transform-origin: top left;
+    image-rendering: pixelated;
+}
+.wrapper{
     overflow: scroll;
+    width: calc( 100vw - 300px);
+    height: calc( 100vh - 50px);
     background: lime;
 }
 textarea {
+    resize: none;
     width: 300px;
     /* height: calc (100vh - 50px); */
     background-color: azure;

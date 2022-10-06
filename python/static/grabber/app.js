@@ -16,8 +16,24 @@ import * as utils from "../utils.js";
 // Note that the t-on-click event, defined in the Root template, is executed in
 // the context of the Root component, even though it is inside the Card component
 // source: https://codepen.io/codefoxx/pen/rNmGMbB
-const { Component, useState, mount, xml } = owl;
+const { Component, useState, mount,onWillDestroy, xml } = owl;
 
+// We define here a custom behaviour: this hook tracks the state of the mouse
+// position
+function useMouse() {
+    const position = useState({x:0, y: 0});
+
+    function update(e) {
+      position.x = e.clientX;
+      position.y = e.clientY;
+    }
+    window.addEventListener('mousemove', update);
+    onWillDestroy(() => {
+        window.removeEventListener('mousemove', update);
+    });
+
+    return position;
+}
 
 
 class DndImage extends Component {
@@ -82,6 +98,13 @@ class DndImage extends Component {
     }
 }
 
+class Grid extends Component {
+    static template = "Grid"
+    setup() {
+        this.state = useState({
+        })
+    }
+}
 
 // Main root component
 class Root extends Component {
@@ -89,9 +112,24 @@ class Root extends Component {
     static components = { DndImage };
     
     setup() {
-        
+        this.state = useState({
+            zoom: '1.0',
+            mousex: 0,
+            mousey: 0,
+        });
+
+        // this hooks is bound to the 'mouse' property.
+        // this.mouse = useMouse();
     }
 
+    get zoom_style() {
+        const izoom = this.state.zoom;
+        return `transform:scale(${izoom});width:${izoom*100}%;`
+    }
+    zoomed_mousemove(e) {
+        this.state.mousex = e.offsetX;
+        this.state.mousey = e.offsetY;
+    }
 
 }
     

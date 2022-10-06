@@ -2,14 +2,24 @@
   
 <div t-name="Root" class="main">
     <div class="wrapper">
+      <div class="zoommable" t-att-style="zoom_style" t-on-mousemove="zoomed_mousemove">
 
-      <DndImage />
+        
+        <DndImage />
+      </div>
     </div>
      
                 <textarea></textarea>
     
     <div class="cp">
-
+      Zoom:  <select  t-model="state.zoom">
+        <option value="0.5">50%</option>
+        <option value="1.0">100%</option>
+        <option value="2.0">200%</option>
+        <option value="4.0">400%</option>
+      </select>
+      <!-- <span> Mouse: <t t-esc="mouse.x * (1/state.zoom)"/>, <t t-esc="mouse.y"/></span> -->
+      <span> Mouse: <t t-esc="state.mousex"/>, <t t-esc="this.state.mousey"/></span>
     </div>
 </div>
 
