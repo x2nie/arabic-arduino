@@ -55,7 +55,8 @@ class DndImage extends Component {
             background: 'yellow',
             width: '200px',
             height: '200px',
-            img_src: 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==',
+            // img_src: 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==',
+            img_src: 'sample.png',
         });
     }
 
@@ -98,6 +99,12 @@ class DndImage extends Component {
     }
 }
 
+
+class Char extends Component {
+    static template = "Char"
+    static components = { LedRow };
+}
+
 class Grid extends Component {
     static template = "Grid"
     setup() {
@@ -109,13 +116,20 @@ class Grid extends Component {
 // Main root component
 class Root extends Component {
     static template = "Root"
-    static components = { DndImage };
+    static components = { DndImage, Grid };
     
     setup() {
         this.state = useState({
             zoom: '1.0',
             mousex: 0,
             mousey: 0,
+        });
+
+        this.grid = useState({
+            left: 10,
+            top: 10,
+            cols:5,
+            rows:8,
         });
 
         // this hooks is bound to the 'mouse' property.

@@ -1,11 +1,20 @@
 <templates>
   
+<div t-name="Grid" class="grid" t-attf-style="left:#{props.left}px; top:#{props.top}px;">
+    <div class="char-row">
+        <span t-foreach="Array(props.cols)" t-as="i" t-key="i_index"><t t-raw="i" /></span>
+    </div>
+</div>
+
 <div t-name="Root" class="main">
     <div class="wrapper">
       <div class="zoommable" t-att-style="zoom_style" t-on-mousemove="zoomed_mousemove">
 
         
         <DndImage />
+        <!-- <t t-if="state.ready"> -->
+          <Grid left="grid.left" top="grid.top" rows="grid.rows" cols="grid.cols"/>
+        <!-- </t> -->
       </div>
     </div>
      
@@ -20,6 +29,8 @@
       </select>
       <!-- <span> Mouse: <t t-esc="mouse.x * (1/state.zoom)"/>, <t t-esc="mouse.y"/></span> -->
       <span> Mouse: <t t-esc="state.mousex"/>, <t t-esc="this.state.mousey"/></span>
+      <span> grid: <input type="number" t-model.number="grid.left"/>,  <input type="number" t-model.number="grid.top"/></span>
+      <span>grid: <t t-esc="grid.left"/>, <t t-esc="grid.top"/></span>
     </div>
 </div>
 
