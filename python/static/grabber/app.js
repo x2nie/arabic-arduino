@@ -18,6 +18,31 @@ import * as utils from "../utils.js";
 // source: https://codepen.io/codefoxx/pen/rNmGMbB
 const { Component, useState, mount,onWillDestroy, xml } = owl;
 
+const env = {
+    grid : {
+        left: 10,
+        top: 10,
+        charsH: 3,
+        charsV: 3,
+    },
+    char: {
+        ledH:5,
+        ledV:8,
+        gapH: 4,
+        gapV: 4,
+    },
+    led: {
+        width:4,
+        height:4,
+        gapH:2,
+        gapV:2,
+    },
+    // dots: {
+    //     cols:5,
+    //     rows:8,        
+    // }
+};
+
 // We define here a custom behaviour: this hook tracks the state of the mouse
 // position
 function useMouse() {
@@ -102,14 +127,14 @@ class DndImage extends Component {
 
 class Char extends Component {
     static template = "Char"
-    static components = { LedRow };
+    // static components = { LedRow };
 }
 
 class Grid extends Component {
     static template = "Grid"
     setup() {
-        this.state = useState({
-        })
+        this.grid = useState(this.env.grid);
+        this.char = useState(this.env.char);
     }
 }
 
@@ -125,12 +150,14 @@ class Root extends Component {
             mousey: 0,
         });
 
-        this.grid = useState({
-            left: 10,
-            top: 10,
-            cols:5,
-            rows:8,
-        });
+        this.grid = useState(this.env.grid);
+        this.char = useState(this.env.char);
+        // this.grid = useState({
+        //     left: 10,
+        //     top: 10,
+        //     cols:5,
+        //     rows:8,
+        // });
 
         // this hooks is bound to the 'mouse' property.
         // this.mouse = useMouse();
@@ -157,26 +184,26 @@ class Root extends Component {
      * This code load templates, and make sure everything is properly connected.
      */
     function prepareOWLApp(templates) {
-    const _configure = owl.App.prototype.configure;
-    owl.App.prototype.configure = function configureOverriden(config) {
-        config = Object.assign({ dev: true }, config); 
-        this.addTemplates(templates);
-        return _configure.call(this, config);
-    }
+        const _configure = owl.App.prototype.configure;
+        owl.App.prototype.configure = function configureOverriden(config) {
+            config = Object.assign({ dev: true }, config); 
+            this.addTemplates(templates);
+            return _configure.call(this, config);
+        }
     }
     
     async function start() {
-    let templates;
-    try {
-        templates = await owl.loadFile('app.xml');
-    } catch(e) {
-        console.error(`This app requires a static server.  If you have python installed, try 'python app.py'`);
-        return;
+        let templates;
+        try {
+            templates = await owl.loadFile('app.xml');
+        } catch(e) {
+            console.error(`This app requires a static server.  If you have python installed, try 'python app.py'`);
+            return;
         }
         prepareOWLApp(templates);
-        mount(Root, document.body, { templates: templates, dev: true});
-    //    app(templates);
-}
+        mount(Root, document.body, { env, templates: templates, dev: true});
+        //    app(templates);
+    }
     
 start();
     
