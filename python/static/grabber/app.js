@@ -20,22 +20,22 @@ const { Component, useState, mount,onWillDestroy, xml } = owl;
 
 const env = {
     grid : {
-        left: 10,
-        top: 10,
-        charsH: 3,
+        left: 261,
+        top: 251,
+        charsH: 15,
         charsV: 3,
     },
     char: {
         ledH:5,
         ledV:8,
-        gapH: 4,
-        gapV: 4,
+        gapH: 15,
+        gapV: 9,
     },
     led: {
-        width:4,
-        height:4,
-        gapH:2,
-        gapV:2,
+        width  :7,
+        height :7,
+        gapH   :1,
+        gapV   :1,
     },
     // dots: {
     //     cols:5,
@@ -127,11 +127,16 @@ class DndImage extends Component {
 
 class Char extends Component {
     static template = "Char"
-    // static components = { LedRow };
+    setup() {
+        // this.grid = useState(this.env.grid);
+        this.char = useState(this.env.char);
+        this.led = useState(this.env.led);
+    }
 }
 
 class Grid extends Component {
     static template = "Grid"
+    static components = { Char };
     setup() {
         this.grid = useState(this.env.grid);
         this.char = useState(this.env.char);
@@ -152,6 +157,7 @@ class Root extends Component {
 
         this.grid = useState(this.env.grid);
         this.char = useState(this.env.char);
+        this.led = useState(this.env.led);
         // this.grid = useState({
         //     left: 10,
         //     top: 10,

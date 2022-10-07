@@ -1,13 +1,19 @@
 <templates>
   
+<div t-name="Char" class="char" t-attf-style="margin-right:#{char.gapH}px; margin-bottom:#{char.gapV}px;">
+    <div t-foreach="Array(char.ledV)" t-as="y" t-key="y_index" class="char-line">
+        <t t-foreach="Array(char.ledH)" t-as="x" t-key="x_index">
+            <span class="led" t-attf-style="margin-right:#{led.gapH}px; margin-bottom:#{led.gapV}px; width:#{led.width}px; height:#{led.height}px;"></span>
+        </t>
+    </div>
+</div>  
+
 <div t-name="Grid" class="grid" t-attf-style="left:#{grid.left}px; top:#{grid.top}px;">
     <div t-foreach="Array(grid.charsV)" t-as="y" t-key="y_index" class="grid-line">
         <t t-foreach="Array(grid.charsH)" t-as="x" t-key="x_index">
-            <span class="char" t-attf-style="margin-right:#{char.gapH}px; margin-bottom:#{char.gapV}px;"></span>
+            <!-- <span class="char" t-attf-style="margin-right:#{char.gapH}px; margin-bottom:#{char.gapV}px;"></span> -->
+            <Char />
         </t>
-    </div>
-    <div class="char-row">
-        <span t-foreach="Array(props.cols)" t-as="i" t-key="i_index"><t t-raw="i" /></span>
     </div>
 </div>
 
@@ -30,6 +36,10 @@
             <span> Grid Pos:<input type="number" t-model.number="grid.left"/>,  <input type="number" t-model.number="grid.top"/></span>
             <span> Chars H:<input type="number" t-model.number="grid.charsH"/> V:<input type="number" t-model.number="grid.charsV"/></span>
             <span> Gap H:<input type="number" t-model.number="char.gapH"/> V:<input type="number" t-model.number="char.gapV"/></span>
+            ##
+            <span> Leds H:<input type="number" t-model.number="char.ledH"/> V:<input type="number" t-model.number="char.ledV"/></span>
+            <span> Chars Wid:<input type="number" t-model.number="led.width"/> Hig:<input type="number" t-model.number="led.height"/></span>
+            <span> Gap H:<input type="number" t-model.number="led.gapH"/> V:<input type="number" t-model.number="led.gapV"/></span>
             <!-- <span>grid: <t t-esc="grid.left"/>, <t t-esc="grid.top"/></span> -->
         </div>
         <div>
