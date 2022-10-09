@@ -20,20 +20,40 @@ const { Component, useState, mount,onWillDestroy, xml } = owl;
 
 const env = {
     grid : {
-        left: 261,
-        top: 251,
+        x: 248,
+        y: 242,
+        w  :1000,
+        h  :1362,
+
+        cols :15,
+        rows :16,
+        // charWidth: 15,
+        // charHeight: 3,
         charsH: 15,
         charsV: 3,
+        paddingTop:0,
+        paddingLeft: 0,
     },
     char: {
-        ledH:5,
-        ledV:8,
-        gapH: 15,
-        gapV: 9,
+        x: 13,
+        y: 0,
+        w  :40,
+        h  :67,
+
+        cols :5,
+        rows :8,
+
+        // ledH:5,
+        // ledV:8,
+        // width  :7,
+        // height :7,
+
+        // gapH: 15,
+        // gapV: 9,
     },
     led: {
-        width  :7,
-        height :7,
+        // width  :7,
+        // height :7,
         gapH   :1,
         gapV   :1,
     },
@@ -81,7 +101,7 @@ class DndImage extends Component {
             width: '200px',
             height: '200px',
             // img_src: 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==',
-            img_src: 'sample.png',
+            img_src: 'sample2.png',
         });
     }
 
@@ -139,7 +159,7 @@ class Grid extends Component {
     static components = { Char };
     setup() {
         this.grid = useState(this.env.grid);
-        this.char = useState(this.env.char);
+        // this.char = useState(this.env.char);
     }
 }
 
@@ -177,6 +197,15 @@ class Root extends Component {
         this.state.mousex = e.offsetX;
         this.state.mousey = e.offsetY;
     }
+    addcols(inc) {
+        this.grid.w += (this.grid.w/this.grid.cols) * inc;
+        this.grid.cols += inc;
+    }
+    addrows(inc) {
+        this.grid.h += (this.grid.h/this.grid.rows) * inc;
+        this.grid.rows += inc;
+    }
+    
 
 }
     

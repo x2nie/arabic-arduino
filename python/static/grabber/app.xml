@@ -1,19 +1,20 @@
 <templates>
   
-<div t-name="Char" class="char" t-attf-style="margin-right:#{char.gapH}px; margin-bottom:#{char.gapV}px;">
-    <div t-foreach="Array(char.ledV)" t-as="y" t-key="y_index" class="char-line">
-        <t t-foreach="Array(char.ledH)" t-as="x" t-key="x_index">
-            <span class="led" t-attf-style="margin-right:#{led.gapH}px; margin-bottom:#{led.gapV}px; width:#{led.width}px; height:#{led.height}px;"></span>
+<div t-name="Char" class="char" t-attf-style="top:#{char.y}px; left:#{char.x}px; width:#{char.w}px; height:#{char.h}px;">
+    <div t-foreach="Array(char.rows)" t-as="y" t-key="y_index" class="char-line">
+        <t t-foreach="Array(char.cols)" t-as="x" t-key="x_index">
+            <span class="led"></span>
         </t>
     </div>
 </div>  
+<!-- <span class="led" t-attf-style0="margin-right:#{led.gapH}px; margin-bottom:#{led.gapV}px; width:#{led.width}px; height:#{led.height}px;"></span> -->
 
-<div t-name="Grid" class="grid" t-attf-style="left:#{grid.left}px; top:#{grid.top}px;">
-    <div t-foreach="Array(grid.charsV)" t-as="y" t-key="y_index" class="grid-line">
-        <t t-foreach="Array(grid.charsH)" t-as="x" t-key="x_index">
+<div t-name="Grid" class="grid" t-attf-style="left:#{grid.x}px; top:#{grid.y}px; width:#{grid.w}px; height:#{grid.h}px;">
+    <div t-foreach="Array(grid.rows)" t-as="y" t-key="y_index" class="grid-line">
+        <div t-foreach="Array(grid.cols)" t-as="x" t-key="x_index" class="grid-cell">
             <!-- <span class="char" t-attf-style="margin-right:#{char.gapH}px; margin-bottom:#{char.gapV}px;"></span> -->
             <Char />
-        </t>
+        </div>
     </div>
 </div>
 
@@ -33,15 +34,31 @@
     
     <div class="cp">
         <div>
-            <span> Grid Pos:<input type="number" t-model.number="grid.left"/>,  <input type="number" t-model.number="grid.top"/></span>
-            <span> Chars H:<input type="number" t-model.number="grid.charsH"/> V:<input type="number" t-model.number="grid.charsV"/></span>
-            <span> Gap H:<input type="number" t-model.number="char.gapH"/> V:<input type="number" t-model.number="char.gapV"/></span>
-            ##
-            <span> Leds H:<input type="number" t-model.number="char.ledH"/> V:<input type="number" t-model.number="char.ledV"/></span>
-            <span> Chars Wid:<input type="number" t-model.number="led.width"/> Hig:<input type="number" t-model.number="led.height"/></span>
-            <span> Gap H:<input type="number" t-model.number="led.gapH"/> V:<input type="number" t-model.number="led.gapV"/></span>
-            <!-- <span>grid: <t t-esc="grid.left"/>, <t t-esc="grid.top"/></span> -->
+            <span> Grid X:<input type="number" t-model.number="grid.x"/>  Y:<input type="number" t-model.number="grid.y"/></span>
+            <span>  W:<input type="number" t-model.number="grid.w"/> H:<input type="number" t-model.number="grid.h"/></span>
+            <span> Cols:<input type="number" t-model.number="grid.cols"/> 
+            <button t-on-click="() => this.addcols(1)">+</button>
+            <button t-on-click="() => this.addcols(-1)">-</button>
+        </span>
+        <span>
+            Rows:<input type="number" t-model.number="grid.rows"/>
+            <button t-on-click="() => this.addrows(1)">+</button>
+            <button t-on-click="() => this.addrows(-1)">-</button>
+        </span>
+        <!-- </div> -->
+        <span> | </span>
+        <!-- <div> -->
+            <span> Char X:<input type="number" t-model.number="char.x"/>  Y:<input type="number" t-model.number="char.y"/></span>
+            <span>  W:<input type="number" t-model.number="char.w"/> H:<input type="number" t-model.number="char.h"/></span>
+            <span> Cols:<input type="number" t-model.number="char.cols"/> Rows:<input type="number" t-model.number="char.rows"/></span>
         </div>
+        <!-- <span> Gap H:<input type="number" t-model.number="char.gapH"/> V:<input type="number" t-model.number="char.gapV"/></span> -->
+            <!-- ## -->
+            <!-- <span> Leds H:<input type="number" t-model.number="char.ledH"/> V:<input type="number" t-model.number="char.ledV"/></span> -->
+            <!-- <span> Chars Wid:<input type="number" t-model.number="led.width"/> Hig:<input type="number" t-model.number="led.height"/></span> -->
+            <!-- <span> Gap H:<input type="number" t-model.number="led.gapH"/> V:<input type="number" t-model.number="led.gapV"/></span> -->
+            <!-- <span>grid: <t t-esc="grid.left"/>, <t t-esc="grid.top"/></span> -->
+        <!-- </div> -->
         <div>
 
             Zoom:  <select  t-model="state.zoom">

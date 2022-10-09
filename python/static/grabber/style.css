@@ -40,7 +40,7 @@ textarea {
     
 }
 input {
-    width:40px;
+    width:50px;
 }
 .image_drop_area {
   min-width: 200px;
@@ -54,7 +54,7 @@ input {
     pointer-events: none;
 }
 .grid, .grid * {
-    box-sizing: content-box;
+    /* box-sizing: content-box; */
     box-shadow: 0 0 1px 1px var( --color );
 }
 .grid{
@@ -63,31 +63,51 @@ input {
     /* border: 2px solid lime; */
     min-width: 150px;
     min-height: 150px;
+    display: flex;
+    flex-direction: column;
 }
 .grid-line{
     margin-bottom: 1px;
     /* border:1px solid blue; */
     --color:blue;
     display: flex;
+    flex-grow: 1;
+}
+.grid-cell {
+    --color:fuchsia;
+    /* display: flex; */
+    flex-grow: 1;
+    position: relative;
+
 }
 .char {
     /* display: inline-block; */
     /* float: left; */
     /* border:1px solid red; */
     /* background-color: rgba(255, 0, 0, 0.26); */
-    min-width: 5px;
-    min-height: 8px;
+    /* min-width: 5px; */
+    /* min-height: 8px; */
+    --color:lime;
+    display: flex;
+    position: absolute;
+    /* flex-grow: 1; */
+    flex-direction: column;
 }
 .char-line{
     /* border:1px solid purple; */
-    --color:purple;
+    /* --color:purple; */
     display: flex;
+    flex-grow: 1;
 }
 
 .led {
+    flex-grow: 1;
     display: block;
     border-radius: 50%;
     background-color: gold;
     /* --color:gold; */
     opacity: .4;
+}
+button{
+    min-width: 12px;
 }
